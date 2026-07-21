@@ -1,0 +1,15 @@
+services: # Cada contenedor a lanzar con el docker compose es un 'service'.
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: books
+    ports:
+      # Change the port if needed due to your conflicts on postgres locally installation
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+# Levanta volumenes para poder asignarlos a los services, en caso de que los volumenes no existan.
+volumes:
+  postgres_data:
