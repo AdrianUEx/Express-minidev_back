@@ -67,15 +67,15 @@ app.use("/authors", authorRoutes);
 app.use("/books", bookRoutes);
 app.use("/loans", loanRoutes);
 
-// * carga directa desde fichero con Multer (dependencia para 'multipart/form-data').
+// * direct upload with Multer (dependency for 'multipart/form-data').
 app.post("/upload", upload.single("file"), (req: Request, res: Response) => {
   // 'file' es lo que sería el valor del atributo "name" del <input>. Dentro de la request con esta codificación, representaría el dato proviniente de dicho <input>, fuera texto (que se puede parsear y desparsear a number) o un archivo.
-  const modo = req.query.modo; // req.query es un objeto que tiene una propiedad por cada query parameter existente en la URL. Por este motivo entiendo que solo puede ser string y number
+  const mode = req.query.mode; // req.query es un objeto que tiene una propiedad por cada query parameter existente en la URL. Por este motivo entiendo que solo puede ser string y number
   // En .single() se está recuperando un único fichero de manera directa, el cual está guardado en req.file. Si fuera más de un fichero, no se usaría single() y los ficheros estarían guardados en req.files
-  const contenido = req.query.contenido;
+  const content = req.query.content;
 
   console.log(
-    `Fichero cargado al directorio. Modo recibido: ${modo}. Tipo de contenido recibido: ${contenido}. Pasando al pipeline()`,
+    `Fichero cargado al directorio. Modo recibido: ${mode}. Tipo de contenido recibido: ${content}. Pasando al pipeline()`,
   );
 
   // Sacado de la docu oficial
@@ -87,7 +87,7 @@ app.post("/upload", upload.single("file"), (req: Request, res: Response) => {
 
       try {
         // El QueryParam solo puede ser 'autor' o 'libro' para poder conmutar un TransformStream u otro.
-        if (req.query.contenido === "autor") {
+        if (req.query.content === "autor") {
           // cada Chunk es una fila del CSV, pero OJO, 'csv-parser' lo trae como JSON
           result = await authorRepository.upsert(chunk, {
             conflictPaths: ["id"], // deben ser siempre columnas con UNIQUE, UNIQUE INDEX o PRIMARY KEY. Puede establecerse una compuesta con @Unique() a nivel de Entity
@@ -111,10 +111,10 @@ app.post("/upload", upload.single("file"), (req: Request, res: Response) => {
   });
 
   pipeline(
-    fs.createReadStream("./uploads/file.csv"), // * Este archivo se va sobrescribiendo, da igual si es de autores o de libros.
+    fs.createReadStream("./uploads/file.csv"), // Este archivo se va sobrescribiendo, da igual si es de autores o de libros.
     csv(),
     transStream,
-    fs.createWriteStream("/dev/null"), // * createWriteStream() espera recibir string o Buffer.
+    fs.createWriteStream("/dev/null"), // .createWriteStream() espera recibir string o Buffer.
     (err) => {
       // Esto es lo que se ejecuta después de todo el proceso cuando el stream de escritura se cierra.
       if (err) {
@@ -124,20 +124,21 @@ app.post("/upload", upload.single("file"), (req: Request, res: Response) => {
       }
 
       res.send(
-        `Fin de la carga mediante ruta directa. Modo: ${modo}. Contenido: ${contenido}.`,
+        `Fin de la carga mediante ruta directa. Modo: ${mode}. Contenido: ${content}.`,
       );
     },
   );
 });
 
+// * upload from directory with Multer (dependency for 'multipart/form-data').
 app.post("/uploads", upload.array("file"), (req: Request, res: Response) => {
   // req.files is array of 'file' files
-  const modo = req.query.modo; // req.query es un objeto que tiene una propiedad por cada query parameter existente en la URL. Por este motivo entiendo que solo puede ser string y number
+  const mode = req.query.mode; // req.query es un objeto que tiene una propiedad por cada query parameter existente en la URL. Por este motivo entiendo que solo puede ser string y number
   const ficheroCarga = req.query.ficherocarga;
   const campoFicheroCarga = req.body.fichero;
   
   console.log(
-    `Fichero cargado al directorio. Modo recibido: ${modo}. Pasando al pipeline()`,
+    `Fichero cargado al directorio. Modo recibido: ${mode}. Pasando al pipeline()`,
   );
 
   // Sacado de la docu oficial
@@ -173,10 +174,10 @@ app.post("/uploads", upload.array("file"), (req: Request, res: Response) => {
   });
 
   pipeline(
-    fs.createReadStream(`./uploads/${campoFicheroCarga}.${modo}`), // * Este archivo se va sobrescribiendo, da igual si es de autores o de libros.
+    fs.createReadStream(`./uploads/${campoFicheroCarga}.${mode}`), // Este archivo se va sobrescribiendo, da igual si es de autores o de libros.
     csv(),
     transStream,
-    fs.createWriteStream("/dev/null"), // * createWriteStream() espera recibir string o Buffer.
+    fs.createWriteStream("/dev/null"), // .createWriteStream() espera recibir string o Buffer.
     (err) => {
       // Esto es lo que se ejecuta después de todo el proceso cuando el stream de escritura se cierra.
       if (err) {
@@ -187,7 +188,7 @@ app.post("/uploads", upload.array("file"), (req: Request, res: Response) => {
     },
   );
 
-  res.send("fin carga múltiple");
+  res.send("Fin carga múltiple");
 });
 
 app.get("/", (req, res) => {
