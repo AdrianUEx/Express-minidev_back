@@ -12,6 +12,6 @@ npm start      # run compiled output
 ```
 
 Comandos para BD local:
-docker compose up 
-docker compose down
+* docker compose up 
+* docker compose down
 
