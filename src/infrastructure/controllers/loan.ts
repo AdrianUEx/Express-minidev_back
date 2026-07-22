@@ -26,7 +26,7 @@ export async function getLoan(req: Request, res: Response) {
 
   try {
     const loanId = req.params.id;
-    loan = await loanRepository.findOneBy({ id: parseInt(loanId) }); // * Supposing id comes from fronted somehow
+    loan = await loanRepository.findOneBy({ id: parseInt(loanId) }); // * Supposing id comes from frontend somehow
     res.status(200).send({ loan });
   } catch (err){
     if (!loan) {

@@ -23,14 +23,14 @@ import { InsertResult } from "typeorm";
 export const app = express();
 const port: number = process.env.PORT ? Number(process.env.PORT) : 3000;
 
+// ! la carga a fichero funciona perfectamente con autores y libros, solo que por cambiar el nombre a uno único para que no se sobrescriba, no se puede pasar el nombre 'file' desde la petición sin más porque ya no se llama así el fichero más reciente
 const storage = multer.diskStorage({
   destination: "uploads/",
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    if (req.query.modo === "csv")
-      cb(null, file.fieldname + uniqueSuffix + ".csv");
-    else 
-      cb(null, file.fieldname + uniqueSuffix + ".json");
+    if (req.query.mode === "csv")
+      cb(null, file.fieldname /* + uniqueSuffix */ + ".csv");
+    else cb(null, file.fieldname + uniqueSuffix + ".json");
   },
 });
 
@@ -131,12 +131,14 @@ app.post("/upload", upload.single("file"), (req: Request, res: Response) => {
 });
 
 // * upload from directory with Multer (dependency for 'multipart/form-data').
-app.post("/uploads", upload.array("file"), (req: Request, res: Response) => {
+app.post("/uploads", upload.single("file"), (req: Request, res: Response) => {
   // req.files is array of 'file' files
   const mode = req.query.mode; // req.query es un objeto que tiene una propiedad por cada query parameter existente en la URL. Por este motivo entiendo que solo puede ser string y number
+  const content = req.query.content;
+
   const ficheroCarga = req.query.ficherocarga;
   const campoFicheroCarga = req.body.fichero;
-  
+
   console.log(
     `Fichero cargado al directorio. Modo recibido: ${mode}. Pasando al pipeline()`,
   );
@@ -150,7 +152,7 @@ app.post("/uploads", upload.array("file"), (req: Request, res: Response) => {
 
       try {
         // El QueryParam solo puede ser 'autor' o 'libro' para poder conmutar un TransformStream u otro.
-        if (req.query.contenido === "autor") {
+        if (req.query.content === "autor") {
           // cada Chunk es una fila del CSV, pero OJO, 'csv-parser' lo trae como JSON
           result = await authorRepository.upsert(chunk, {
             conflictPaths: ["id"], // deben ser siempre columnas con UNIQUE, UNIQUE INDEX o PRIMARY KEY. Puede establecerse una compuesta con @Unique() a nivel de Entity

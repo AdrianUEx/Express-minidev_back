@@ -29,7 +29,7 @@ export async function getBook(req: Request, res: Response) {
 
   try {
     const bookId: string = req.params.id;
-    book = await bookRepository.findOneBy({ isbn: parseInt(bookId) }); // * Supposing id comes from fronted somehow
+    book = await bookRepository.findOneBy({ isbn: parseInt(bookId) }); // * Supposing id comes from frontend somehow
 
     res.status(200).send({ book });
   } catch (err) {
@@ -55,7 +55,7 @@ export async function registerBook(req: Request, res: Response) {
     });
     console.log(existingBook)
     if (!existingBook) {
-      // ! insert() inserta eternamente asignando un nuevo id en lugar de comprobar primero si ya existe. Tal vez habría que hacer que el título fuese PK compuesta junto al id.
+      // ! insert() inserta eternamente asignando un nuevo id en lugar de comprobar primero si ya existe. Tal vez habría que hacer que el título fuese PK compuesta junto al id o marcarlos a ambos con UNIQUE usando @Unique({[... , ...]}).
       result = await bookRepository.insert(newBook); // .save() can also be used instead of .insert(), but .insert() is more specialized
 
       res.status(201).send("Book inserted successfully");
