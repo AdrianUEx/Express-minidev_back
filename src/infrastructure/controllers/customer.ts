@@ -11,20 +11,11 @@ export async function getCustomers(req: Request, res: Response) {
   let customerList: Customer[] = [];
 
   try {
-    console.log("getCustomers invocado");
-
-    customerList = await customerRepository.find(); // * .find() sin argumentos ejecuta un SELECT * FROM "Customer", donde Customer es la tabla de la BD.
+    customerList = await customerRepository.find(); // * .find() without arguments executes a SELECT * FROM "Customer"; query, where Customer is the database table
 
     res.status(200).send({ customerList });
-    console.log(
-      "El status 200 de getCustomers() se envió. Customers recuperados:",
-      customerList,
-    );
   } catch (err){
     if (customerList.length === 0) {
-      console.log(
-        "getCustomers() no pudo encontrar Customers por algún motivo",
-      );
       res.status(404).send("Customer list not found");
     } else {
       res.status(400).send("Bad Request from the client");
@@ -35,7 +26,7 @@ export async function getCustomers(req: Request, res: Response) {
 export async function getCustomer(req: Request, res: Response) {
   let customer: Customer | null = null;
   try {
-    customer = await customerRepository.findOneBy({ id: parseInt(req.params.id) }); // * Supposing id comes from fronted somehow
+    customer = await customerRepository.findOneBy({ id: Number.parseInt(req.params.id) }); // * Supposing id comes from fronted somehow. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
     res.status(200).send({ customer });
   } catch (err){
     if (!customer) {
@@ -48,7 +39,7 @@ export async function getCustomer(req: Request, res: Response) {
 
 export async function signUpCustomer(req: Request, res: Response) {
   const newCustomer = req.body; // * This is the JSON of a new Customer coming from a form or similar.
-  // ! esto está hecho así adrede por si se cambia más adelante
+  // ! done like this on purpose in case it needs to be changed later.
   newCustomer.name = req.body.name;
   newCustomer.lastname = req.body.lastname;
   newCustomer.phone = req.body.phone;
@@ -60,7 +51,7 @@ export async function signUpCustomer(req: Request, res: Response) {
     res.status(201).send("Customer inserted successfully");
   } catch (err) {
     if (!newCustomer) {
-      res.status(400).send(`Customer not found. ${err}`); // TODO: cambiar código de estado
+      res.status(400).send(`Customer not found. ${err}`);
     } else {
       res.status(404).send(`Bad Request from the client. ${err}`);
     }

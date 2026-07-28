@@ -1,4 +1,4 @@
-// * Interceptación de rutas dirigidas al Prestamo
+// * Interception of requests directed to Loan
 
 import { Router, Request, Response } from "express";
 import { createLoan, deleteLoan, getLoan, getLoans, updateLoan } from "../infrastructure/controllers/loan";

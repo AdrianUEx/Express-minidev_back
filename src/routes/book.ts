@@ -1,4 +1,4 @@
-// * Interceptación de rutas dirigidas al Libro
+// * Interception of requests directed to Book
 
 import { Router, Request, Response } from "express";
 import { deleteBook, getBook, getBooks, registerBook, updateBook } from "../infrastructure/controllers/book";

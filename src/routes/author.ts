@@ -1,4 +1,4 @@
-// * Interceptación de rutas dirigidas al Autor
+// * Interception of requests directed to Author
 
 import { Router, Request, Response } from "express";
 import { deleteAuthor, getAuthor, getAuthors, signUpAuthor, updateAuthor } from "../infrastructure/controllers/author";

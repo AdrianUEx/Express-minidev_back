@@ -31,7 +31,7 @@ export async function getAuthor(req: Request, res: Response) {
     const authorId = req.params.id; // '.params' returns string values
     console.log(authorId);
 
-    author = await authorRepository.findOneBy({ id: parseInt(authorId) }); // * Supposing id comes from frontend in the URL
+    author = await authorRepository.findOneBy({ id: Number.parseInt(authorId) }); // * Supposing id comes from frontend in the URL. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
 
     console.log(author);
 
@@ -60,7 +60,7 @@ export async function signUpAuthor(req: Request, res: Response) {
     res.status(201).send("Author inserted successfully");
   } catch (err) {
     if (!newAuthor) {
-      res.status(404).send(`Author not found for inserting ${result}`); // TODO: cambiar código de estado
+      res.status(404).send(`Author not found for inserting ${result}`);
     } else {
       res.status(400).send("Bad Request from the client");
     }
@@ -89,7 +89,7 @@ export async function deleteAuthor(req: Request, res: Response) {
   const authorId: string = req.params.id; // '.params' returns string values
 
   try {
-    const deleteResult = await authorRepository.delete(authorId); // ? He comprobado con Postman que esto borra aunque no utiliza un number. ¿Por qué?
+    const deleteResult = await authorRepository.delete(authorId); // ? I've tested with Postman that this deletes even if it doesnt use a number
     res.status(200).send(`Author deleted successfully: ${deleteResult}`);
   } catch (err) {
     if (!authorId) {
@@ -98,19 +98,4 @@ export async function deleteAuthor(req: Request, res: Response) {
       res.status(404).send("Author not found for deleting");
     }
   }
-}
-
-export async function prueba(req: Request, res: Response) {
-  authorRepository
-    .createQueryBuilder("author")
-    .where("author.id = :id", { id: 1 })
-    .stream(); // stream() devuelve un Readable Stream de Node.js
-  authorRepository
-    .createQueryBuilder("author")
-    .insert()
-    .into(Author)
-    .values({})
-    .orUpdate(["firstName", "lastName"], ["externalId"], {
-      skipUpdateIfNoValuesChanged: true,
-    });
 }

@@ -1,4 +1,4 @@
-// * Interceptación de rutas dirigidas al Customere
+// * Interception of requests directed to Customer
 
 import { Router, Request, Response } from "express";
 import { deleteCustomer, getCustomer, getCustomers, signUpCustomer, updateCustomer } from "../infrastructure/controllers/customer";

@@ -29,7 +29,7 @@ export async function getBook(req: Request, res: Response) {
 
   try {
     const bookId: string = req.params.id;
-    book = await bookRepository.findOneBy({ isbn: parseInt(bookId) }); // * Supposing id comes from frontend somehow
+    book = await bookRepository.findOneBy({ isbn: Number.parseInt(bookId) }); // * Supposing id comes from frontend somehow. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
 
     res.status(200).send({ book });
   } catch (err) {
@@ -65,7 +65,7 @@ export async function registerBook(req: Request, res: Response) {
 
   } catch (err) {
     if (!newBook) {
-      res.status(404).send("Book not found for inserting"); // TODO: cambiar código de estado
+      res.status(404).send("Book not found for inserting");
     } else {
       res.status(400).send(`Bad Request from the client ${err}`);
     }

@@ -26,7 +26,7 @@ export async function getLoan(req: Request, res: Response) {
 
   try {
     const loanId = req.params.id;
-    loan = await loanRepository.findOneBy({ id: parseInt(loanId) }); // * Supposing id comes from frontend somehow
+    loan = await loanRepository.findOneBy({ id: Number.parseInt(loanId) }); // * Supposing id comes from frontend somehow. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
     res.status(200).send({ loan });
   } catch (err){
     if (!loan) {
@@ -51,7 +51,7 @@ export async function createLoan(req: Request, res: Response) {
     res.status(201).send("Loan inserted successfully");
   } catch (err){
     if (!newLoan) {
-      res.status(400).send("Loan is null or undefined"); // TODO: cambiar código de estado
+      res.status(400).send("Loan is null or undefined"); 
     } else {
       res.status(400).send(`Bad Request from the client. ${err}`);
     }
@@ -62,7 +62,7 @@ export async function updateLoan(req: Request, res: Response) {
   let loan = req.body;
 
   try {
-    loan = await loanRepository.update(req.params.id, loan); // TODO: en este caso es cambiar el estado. Eso se puede hacer más específicamente con el .update() de ser necesario
+    loan = await loanRepository.update(req.params.id, loan);
     res.status(200).send(`Loan updated successfully`);
   } catch (err){
     if (!loan) {
