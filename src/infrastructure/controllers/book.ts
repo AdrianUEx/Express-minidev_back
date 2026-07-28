@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../../data-source";
 import { Book } from "../entities/book";
 import { InsertResult } from "typeorm";
-import { BookDTO } from "../../models/book.interface";
+import { BookDTO } from "../../application/models/book.interface";
 import { UpdateResult } from "typeorm/browser";
 
 const orm = AppDataSource;

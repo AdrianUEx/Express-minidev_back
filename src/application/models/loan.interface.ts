@@ -1,4 +1,4 @@
-import { LoanState } from "../infrastructure/entities/loan";
+import { LoanState } from "../../infrastructure/entities/loan";
 import { BookDTO } from "./book.interface";
 import { CustomerDTO } from "./customer.interface";
 

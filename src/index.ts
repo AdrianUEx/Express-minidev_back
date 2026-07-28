@@ -1,10 +1,10 @@
 import express, { NextFunction, Request, Response } from "express";
 import "reflect-metadata";
 import { initializeDatabase } from "./data-source";
-import { authorRouter } from "./routes/author";
-import { bookRouter } from "./routes/book";
-import { customerRouter } from "./routes/customer";
-import { loanRouter } from "./routes/loan";
+import { authorRouter } from "./infrastructure/routes/author";
+import { bookRouter } from "./infrastructure/routes/book";
+import { customerRouter } from "./infrastructure/routes/customer";
+import { loanRouter } from "./infrastructure/routes/loan";
 import bodyParser from "body-parser";
 import cors from "cors";
 import "dotenv/config";
