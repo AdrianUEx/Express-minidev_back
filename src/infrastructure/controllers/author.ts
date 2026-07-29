@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../../domain/data-source";
 import { Author } from "../entities/author";
 import { InsertResult, UpdateResult } from "typeorm";
-import { AuthorDTO } from "../../application/models/author.interface";
+import { AuthorDTO } from "../../domain/models/author.interface";
 
 const orm = AppDataSource;
 const authorRepository = orm.getRepository(Author);

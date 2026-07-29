@@ -1,4 +1,4 @@
-import { AuthorDTO } from "../models/author.interface";
+import { AuthorDTO } from "../../../domain/models/author.interface";
 
 // * As a class in the Application Layer, this class can access to its layer and the Domain Layer.
 export class AuthorFinder {
