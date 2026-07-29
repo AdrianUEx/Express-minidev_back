@@ -5,7 +5,7 @@ import { pipeline, Transform } from "node:stream";
 import fs from "fs";
 
 import { InsertResult } from "typeorm";
-import { AppDataSource } from "../../data-source";
+import { AppDataSource } from "../../domain/data-source";
 import { Author } from "../entities/author";
 import { Book } from "../entities/book";
 

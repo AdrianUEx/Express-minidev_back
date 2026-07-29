@@ -1,6 +1,6 @@
 // * Method list to intercept requests oriented to Loan entity management
 import { Request, Response } from "express";
-import { AppDataSource } from "../../data-source";
+import { AppDataSource } from "../../domain/data-source";
 import { Loan, LoanState } from "../entities/loan";
 
 const orm = AppDataSource;

@@ -1,15 +1,20 @@
 import express, { NextFunction, Request, Response } from "express";
 import "reflect-metadata";
-import { initializeDatabase } from "./data-source";
+
+// Inferior layers dependencies
+import { initializeDatabase } from "./domain/data-source";
 import { authorRouter } from "./infrastructure/routes/author";
 import { bookRouter } from "./infrastructure/routes/book";
 import { customerRouter } from "./infrastructure/routes/customer";
 import { loanRouter } from "./infrastructure/routes/loan";
+import { directUpload, fromRequestUpload } from "./infrastructure/controllers/upload";
+// External dependencies
 import bodyParser from "body-parser";
 import cors from "cors";
 import "dotenv/config";
 import multer, { Multer } from "multer";
-import { directUpload, fromRequestUpload } from "./infrastructure/controllers/upload";
+
+
 
 // * Backend's main file. Every dependency and config is declared here: dependencies, database connection, etc. All that is important.
 
@@ -67,7 +72,7 @@ app.get("/", (req, res) => {
   res.send("Express + TypeScript server is running");
 });
 
-// * Initialization of the database connection using TypeORM
+// * Initialization of the database connection using TypeORM. It can be accessed because it belongs to Domain Layer (an inferior layer)
 app.listen(port, async () => {
   await initializeDatabase();
   console.log(`Server listening on http://localhost:${port}`);

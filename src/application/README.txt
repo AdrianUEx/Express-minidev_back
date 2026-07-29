@@ -1,3 +1,3 @@
 Application Layer is where Use Cases are located. Use Cases are operations with entities (objects). Here there are CRUD operations and others that manage entities' data.
 Application Layer can only be 'accessed' (ie. referenced) by Infrastructure Layer objects. This means Infrastructure Layer can have Application Layer types but not the other way around,
-because Infrastructure Layer is an external layer from Application Layer.
+because Infrastructure Layer is an external layer from the Application Layer.

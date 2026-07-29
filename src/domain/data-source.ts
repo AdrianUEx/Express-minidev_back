@@ -1,8 +1,8 @@
 import { DataSource } from "typeorm";
-import { Author } from "./infrastructure/entities/author";
-import { Book } from "./infrastructure/entities/book";
-import { Customer } from "./infrastructure/entities/customer";
-import { Loan } from "./infrastructure/entities/loan";
+import { Author } from "../infrastructure/entities/author";
+import { Book } from "../infrastructure/entities/book";
+import { Customer } from "../infrastructure/entities/customer";
+import { Loan } from "../infrastructure/entities/loan";
 
 // * DataSource is what allows to establish connection with DB. Several can be declared depending on the databases to work with
 // * They are always executed by calling initalize() method and connection is hold until destroy() is called.

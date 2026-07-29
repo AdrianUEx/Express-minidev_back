@@ -1,7 +1,7 @@
 // * Method list to intercept requests oriented to Author entity management
 
 import { Request, Response } from "express";
-import { AppDataSource } from "../../data-source";
+import { AppDataSource } from "../../domain/data-source";
 import { Author } from "../entities/author";
 import { InsertResult, UpdateResult } from "typeorm";
 import { AuthorDTO } from "../../application/models/author.interface";

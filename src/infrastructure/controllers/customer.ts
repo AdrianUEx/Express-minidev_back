@@ -1,7 +1,7 @@
 // * Method list to intercept requests oriented to Customer entity management
 import { Request, Response } from "express";
 import { Customer } from "../entities/customer";
-import { AppDataSource } from "../../data-source";
+import { AppDataSource } from "../../domain/data-source";
 import { InsertResult } from "typeorm";
 
 const orm = AppDataSource;
