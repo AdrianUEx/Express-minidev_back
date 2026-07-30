@@ -1,7 +1,12 @@
-import { Book } from "../../infrastructure/entities/typeOrmBook";
-import { Customer } from "../../infrastructure/entities/typeOrmCustomer";
-import { LoanState } from "../../infrastructure/entities/typeOrmLoan";
+import { Book } from "./book";
+import { Customer } from "./customer";
 
+
+export enum LoanState {
+  LOANED = "loaned",
+  RETURNED = "returned",
+  DELAYED = "delayed",
+}
 
 export class Loan {
 

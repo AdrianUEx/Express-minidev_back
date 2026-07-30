@@ -98,7 +98,7 @@ export async function deleteAuthor(req: Request, res: Response) {
   const useCase: AuthorDeleter = new AuthorDeleter(authorRepository);
 
   try {
-    await useCase.run(authorId); // * This is the use case that will delete the author with the given id. It will throw an error if the author is not found.
+    await useCase.run(Number.parseInt(authorId)); // * This is the use case that will delete the author with the given id. It will throw an error if the author is not found.
     res.status(204).send();
   } catch (err) {
     if (!authorId) {

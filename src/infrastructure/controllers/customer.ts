@@ -1,17 +1,17 @@
-// * Method list to intercept requests oriented to Customer entity management
+// * Method list to intercept requests oriented toTypeORMCustomerentity management
 import { Request, Response } from "express";
-import { Customer } from "../entities/typeOrmCustomer";
-import { AppDataSource } from "../../domain/data-source";
+import { TypeORMCustomer } from "../entities/typeOrmCustomer";
+import { AppDataSource } from "../data-source";
 import { InsertResult } from "typeorm";
 
 const orm = AppDataSource;
-const customerRepository = orm.getRepository(Customer);
+const customerRepository = orm.getRepository(TypeORMCustomer);
 
 export async function getCustomers(req: Request, res: Response) {
-  let customerList: Customer[] = [];
+  let customerList: TypeORMCustomer[] = [];
 
   try {
-    customerList = await customerRepository.find(); // * .find() without arguments executes a SELECT * FROM "Customer"; query, where Customer is the database table
+    customerList = await customerRepository.find(); // * .find() without arguments executes a SELECT * FROM "Customer"; query, whereTypeORMCustomeris the database table
 
     res.status(200).send({ customerList });
   } catch (err){
@@ -24,7 +24,7 @@ export async function getCustomers(req: Request, res: Response) {
 }
 
 export async function getCustomer(req: Request, res: Response) {
-  let customer: Customer | null = null;
+  let customer:TypeORMCustomer| null = null;
   try {
     customer = await customerRepository.findOneBy({ id: Number.parseInt(req.params.id) }); // * Supposing id comes from fronted somehow. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
     res.status(200).send({ customer });
@@ -38,7 +38,7 @@ export async function getCustomer(req: Request, res: Response) {
 }
 
 export async function signUpCustomer(req: Request, res: Response) {
-  const newCustomer = req.body; // * This is the JSON of a new Customer coming from a form or similar.
+  const newCustomer = req.body; // * This is the JSON of a newTypeORMCustomercoming from a form or similar.
   // ! done like this on purpose in case it needs to be changed later.
   newCustomer.name = req.body.name;
   newCustomer.lastname = req.body.lastname;

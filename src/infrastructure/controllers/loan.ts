@@ -1,7 +1,8 @@
 // * Method list to intercept requests oriented to Loan entity management
 import { Request, Response } from "express";
-import { AppDataSource } from "../../domain/data-source";
-import { TypeORMLoan, LoanState } from "../entities/typeOrmLoan";
+import { AppDataSource } from "../data-source";
+import { TypeORMLoan } from "../entities/typeOrmLoan";
+import { LoanState } from "../../domain/models/loan";
 
 const orm = AppDataSource;
 const loanRepository = orm.getRepository(TypeORMLoan);
@@ -37,7 +38,7 @@ export async function getLoan(req: Request, res: Response) {
   }
 }
 
-// ? Revisar lógica
+// ? Review logic
 export async function createLoan(req: Request, res: Response) {
   const newLoan: TypeORMLoan = req.body; // * This is the JSON of a new Loan coming from a form or similar.
 
