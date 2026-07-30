@@ -1,7 +1,7 @@
 // * Interception of requests directed to Customer
 
 import { Router, Request, Response } from "express";
-import { deleteCustomer, getCustomer, getCustomers, signUpCustomer, updateCustomer } from "../infrastructure/controllers/customer";
+import { deleteCustomer, getCustomer, getCustomers, signUpCustomer, updateCustomer } from "../controllers/customer";
 
 export const customerRouter = Router();
 

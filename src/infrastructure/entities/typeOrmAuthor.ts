@@ -1,11 +1,10 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
 
-
 @Entity()
-export class Customer {
+export class TypeORMAuthor {
 
     @PrimaryGeneratedColumn() // * Every Entity must have a primary key. Using Generated this key is autoincremented 
-    id: number; // * number is mapped by default as integer in the DB.
+    id: number // * number is mapped by default as integer in the DB.
 
     @Column({length: 80})
     name: string // * String is mapped to varchar(255) by default
@@ -14,9 +13,11 @@ export class Customer {
     lastname: string
 
     @Column()
-    phone: number
+    birthDate: Date
 
-    @Column()
-    registrationDate: Date
+    @Column({length: 80})
+    nationality: string
 
+    @Column("text")
+    biography: string
 }

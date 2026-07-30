@@ -1,16 +1,15 @@
 // * Method list to intercept requests oriented to Book entity management
 import { Request, Response } from "express";
-import { AppDataSource } from "../../domain/data-source";
-import { Book } from "../entities/book";
+import { AppDataSource } from "../../infrastructure/data-source";
+import { TypeORMBook } from "../entities/typeOrmBook";
 import { InsertResult } from "typeorm";
-import { BookDTO } from "../../domain/models/book.interface";
 import { UpdateResult } from "typeorm/browser";
 
 const orm = AppDataSource;
-const bookRepository = orm.getRepository(Book);
+const bookRepository = orm.getRepository(TypeORMBook);
 
 export async function getBooks(req: Request, res: Response) {
-  let bookList: Book[] = [];
+  let bookList: TypeORMBook[] = [];
 
   try {
     bookList = await bookRepository.find();
@@ -25,7 +24,7 @@ export async function getBooks(req: Request, res: Response) {
 }
 
 export async function getBook(req: Request, res: Response) {
-  let book: Book | null = null;
+  let book: TypeORMBook | null = null;
 
   try {
     const bookId: string = req.params.id;
@@ -42,14 +41,14 @@ export async function getBook(req: Request, res: Response) {
 }
 
 export async function registerBook(req: Request, res: Response) {
-  let newBook: BookDTO = req.body; // * This is the JSON of a new Book coming from a form or similar.
+  let newBook: TypeORMBook = req.body; // * This is the JSON of a new Book coming from a form or similar.
   console.log(newBook);
 
   let result: InsertResult = new InsertResult();
 
   try {
     // * SELECT * FROM books WHERE title = [titulo] AND author = [id del autor]
-    const existingBook: BookDTO | null = await bookRepository.findOneBy({
+    const existingBook: TypeORMBook | null = await bookRepository.findOneBy({
       title: newBook.title,
      /*  author: newBook.author.id, */
     });
@@ -73,7 +72,7 @@ export async function registerBook(req: Request, res: Response) {
 }
 
 export async function updateBook(req: Request, res: Response) {
-  const book: BookDTO = req.body; // Without typing to allow object manipulation
+  const book: TypeORMBook = req.body; // Without typing to allow object manipulation
 
   try {
     const bookResult: UpdateResult = await bookRepository.update(req.params.id, book);

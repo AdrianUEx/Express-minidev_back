@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import "reflect-metadata";
 
 // Inferior layers dependencies
-import { initializeDatabase } from "../domain/data-source";
+import { initializeDatabase } from "./data-source";
 import { authorRouter } from "../infrastructure/routes/author";
 import { bookRouter } from "../infrastructure/routes/book";
 import { customerRouter } from "../infrastructure/routes/customer";

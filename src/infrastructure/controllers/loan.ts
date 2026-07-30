@@ -1,13 +1,13 @@
 // * Method list to intercept requests oriented to Loan entity management
 import { Request, Response } from "express";
 import { AppDataSource } from "../../domain/data-source";
-import { Loan, LoanState } from "../entities/loan";
+import { TypeORMLoan, LoanState } from "../entities/typeOrmLoan";
 
 const orm = AppDataSource;
-const loanRepository = orm.getRepository(Loan);
+const loanRepository = orm.getRepository(TypeORMLoan);
 
 export async function getLoans(req: Request, res: Response) {
-  let loanList: Loan[] = [];
+  let loanList: TypeORMLoan[] = [];
 
   try {
     loanList = await loanRepository.find();
@@ -22,7 +22,7 @@ export async function getLoans(req: Request, res: Response) {
 }
 
 export async function getLoan(req: Request, res: Response) {
-  let loan: Loan | null = null;
+  let loan: TypeORMLoan | null = null;
 
   try {
     const loanId = req.params.id;
@@ -39,7 +39,7 @@ export async function getLoan(req: Request, res: Response) {
 
 // ? Revisar lógica
 export async function createLoan(req: Request, res: Response) {
-  const newLoan: Loan = req.body; // * This is the JSON of a new Loan coming from a form or similar.
+  const newLoan: TypeORMLoan = req.body; // * This is the JSON of a new Loan coming from a form or similar.
 
   if(newLoan.state === LoanState.LOANED) {
     newLoan.realReturnDate = new Date(Date.now() + (20*86400*1000)); // Extracted from Mozilla Foundation official docu.

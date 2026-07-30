@@ -1,7 +1,7 @@
 // * Interception of requests directed to Author
 
-import { Router, Request, Response } from "express";
-import { deleteAuthor, getAuthor, getAuthors, signUpAuthor, updateAuthor } from "../infrastructure/controllers/author";
+import { Router } from "express";
+import { deleteAuthor, getAuthor, getAuthors, signUpAuthor, updateAuthor } from "../controllers/author";
 
 export const authorRouter = Router();
 

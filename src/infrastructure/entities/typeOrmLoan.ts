@@ -7,8 +7,8 @@ import {
   JoinTable,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Customer } from "./customer";
-import { Book } from "./book";
+import { Customer } from "./typeOrmCustomer";
+import { Book } from "./typeOrmBook";
 
 export enum LoanState {
   LOANED = "loaned",
@@ -17,7 +17,7 @@ export enum LoanState {
 }
 
 @Entity()
-export class Loan {
+export class TypeORMLoan {
 
   @PrimaryGeneratedColumn() // * Every Entity must have a primary key. Using Generated this key is autoincremented 
   id: number; // * number is mapped by default as integer in the DB.

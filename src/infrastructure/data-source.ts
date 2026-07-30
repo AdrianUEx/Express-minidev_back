@@ -1,8 +1,8 @@
 import { DataSource } from "typeorm";
-import { Author } from "../infrastructure/entities/author";
-import { Book } from "../infrastructure/entities/book";
-import { Customer } from "../infrastructure/entities/customer";
-import { Loan } from "../infrastructure/entities/loan";
+import { TypeORMAuthor } from "../infrastructure/entities/typeOrmAuthor";
+import { TypeORMBook } from "../infrastructure/entities/typeOrmBook";
+import { TypeORMCustomer } from "../infrastructure/entities/typeOrmCustomer";
+import { TypeORMLoan } from "../infrastructure/entities/typeOrmLoan";
 
 // * DataSource is what allows to establish connection with DB. Several can be declared depending on the databases to work with
 // * They are always executed by calling initalize() method and connection is hold until destroy() is called.
@@ -18,7 +18,7 @@ export const AppDataSource = new DataSource({
     database: "books",
     synchronize: true, // * this property must be false when using migrations to not synchronize schemas automatically
     logging: true,
-    entities: [Author, Book, Customer, Loan],
+    entities: [TypeORMAuthor, TypeORMBook, TypeORMCustomer, TypeORMLoan],
     subscribers: [],
     migrations: ["/migrations"], // * This line, along 'synchronize: false', it's the basic setup for migrations
 

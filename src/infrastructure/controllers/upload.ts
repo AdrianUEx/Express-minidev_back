@@ -5,14 +5,14 @@ import { pipeline, Transform } from "node:stream";
 import fs from "fs";
 
 import { InsertResult } from "typeorm";
-import { AppDataSource } from "../../domain/data-source";
-import { Author } from "../entities/author";
-import { Book } from "../entities/book";
+import { AppDataSource } from "../../infrastructure/data-source";
+import { TypeORMAuthor } from "../entities/typeOrmAuthor";
+import { TypeORMBook } from "../entities/typeOrmBook";
 
 
 const orm = AppDataSource;
-const authorRepository = orm.getRepository(Author);
-const bookRepository = orm.getRepository(Book);
+const authorRepository = orm.getRepository(TypeORMAuthor);
+const bookRepository = orm.getRepository(TypeORMBook);
 
 export function directUpload(req: Request, res: Response) {
   // 'file' is what would be <input> "name" property value. Inside the request, it would represent the date coming from said <input>, whether it be text (which can be parsed to number) or a file.

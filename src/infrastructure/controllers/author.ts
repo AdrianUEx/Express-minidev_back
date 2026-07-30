@@ -1,19 +1,25 @@
-// * Method list to intercept requests oriented to Author entity management
+// * Method list to intercept requests oriented toTypeORMAuthorentity management
 
 import { Request, Response } from "express";
-import { AppDataSource } from "../../domain/data-source";
-import { Author } from "../entities/author";
+import { AppDataSource } from "../../infrastructure/data-source";
+import { TypeORMAuthor } from "../entities/typeOrmAuthor";
 import { InsertResult, UpdateResult } from "typeorm";
-import { AuthorDTO } from "../../domain/models/author.interface";
+import { AuthorDeleter } from "../../application/use-cases/authors/authorDeleter";
+import { AuthorRepository } from "../repositories/typeorm/authorRepository";
+import { AuthorSearcher } from "../../application/use-cases/authors/authorSearcher";
 
 const orm = AppDataSource;
-const authorRepository = orm.getRepository(Author);
+//const authorRepository = orm.getRepository(TypeORMAuthor);
+const authorRepository: AuthorRepository = new AuthorRepository();
 
 export async function getAuthors(req: Request, res: Response) {
-  let authorList: AuthorDTO[] = [];
+  let authorList: TypeORMAuthor[] = [];
+  const useCase = new AuthorSearcher(authorRepository);
 
   try {
-    authorList = await authorRepository.find();
+    // authorList = await authorRepository.find();
+    authorList = useCase.run();
+
     res.status(200).send({ authorList });
   } catch (err) {
     if (authorList.length === 0) {
@@ -25,13 +31,15 @@ export async function getAuthors(req: Request, res: Response) {
 }
 
 export async function getAuthor(req: Request, res: Response) {
-  let author: AuthorDTO | null = null;
+  let author: TypeORMAuthor | null = null;
 
   try {
     const authorId = req.params.id; // '.params' returns string values
     console.log(authorId);
 
-    author = await authorRepository.findOneBy({ id: Number.parseInt(authorId) }); // * Supposing id comes from frontend in the URL. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
+    author = await authorRepository.findOneBy({
+      id: Number.parseInt(authorId),
+    }); // * Supposing id comes from frontend in the URL. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
 
     console.log(author);
 
@@ -46,7 +54,7 @@ export async function getAuthor(req: Request, res: Response) {
 }
 
 export async function signUpAuthor(req: Request, res: Response) {
-  const newAuthor: AuthorDTO = req.body; // * This is the JSON of a new Author coming from a form or similar.
+  const newAuthor: TypeORMAuthor = req.body; // * This is the JSON of a newTypeORMAuthorcoming from a form or similar.
 
   /*   newAuthor.name = req.body.name;
   newAuthor.lastname = req.body.lastname;
@@ -68,7 +76,7 @@ export async function signUpAuthor(req: Request, res: Response) {
 }
 
 export async function updateAuthor(req: Request, res: Response) {
-  const author: AuthorDTO = req.body; // What it is received from the frontend to send to the DB
+  const author: TypeORMAuthor = req.body; // What it is received from the frontend to send to the DB
 
   try {
     const authorResult: UpdateResult = await authorRepository.update(
@@ -87,10 +95,11 @@ export async function updateAuthor(req: Request, res: Response) {
 
 export async function deleteAuthor(req: Request, res: Response) {
   const authorId: string = req.params.id; // '.params' returns string values
+  const useCase: AuthorDeleter = new AuthorDeleter(authorRepository);
 
   try {
-    const deleteResult = await authorRepository.delete(authorId); // ? I've tested with Postman that this deletes even if it doesnt use a number
-    res.status(200).send(`Author deleted successfully: ${deleteResult}`);
+    await useCase.run(authorId); // * This is the use case that will delete the author with the given id. It will throw an error if the author is not found.
+    res.status(204).send();
   } catch (err) {
     if (!authorId) {
       res.status(400).send("Bad Request from the client");

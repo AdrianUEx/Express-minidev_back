@@ -1,9 +1,9 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
-import { Author } from "./author"
+import { TypeORMAuthor } from "./typeOrmAuthor"
 
 
 @Entity()
-export class Book {
+export class TypeORMBook {
 
     @PrimaryGeneratedColumn() // * Every Entity must have a primary key. Using Generated this key is autoincremented 
     isbn: number; // * number is mapped by default as integer in the DB.
@@ -23,7 +23,7 @@ export class Book {
     @Column()
     stock: number
     
-    @ManyToOne(() => Author)
+    @ManyToOne(() => TypeORMAuthor)
     @JoinColumn({name: "id"}) // * Where you use JoinColumn, there is registered the relation id and also the foreign key of the relation with the other table, just like in SpringBoot
-    author: Author;
+    author: TypeORMAuthor;
 }
