@@ -72,7 +72,7 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript server is running");
 });
 
-// * Initialization of the database connection using TypeORM. It can be accessed because it belongs to Domain Layer (an inferior layer)
+// * Initialization of the database connection using TypeORM. It can be accessed because it belongs to the Domain Layer (an inferior layer)
 app.listen(port, async () => {
   await initializeDatabase();
   console.log(`Server listening on http://localhost:${port}`);

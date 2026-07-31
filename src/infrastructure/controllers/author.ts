@@ -55,13 +55,15 @@ export async function getAuthor(req: Request, res: Response) {
 }
 
 export async function signUpAuthor(req: Request, res: Response) {
-  const newAuthor: TypeORMAuthor = req.body; // * This is the JSON of a newTypeORMAuthorcoming from a form or similar.
+  const newAuthor: TypeORMAuthor = req.body; // * This is the JSON of a new TypeORMAuthor coming from a form or similar.
 
-  /*   newAuthor.name = req.body.name;
+  /*   
+  newAuthor.name = req.body.name;
   newAuthor.lastname = req.body.lastname;
   newAuthor.birthDate = req.body.birthDate;
   newAuthor.nationality = req.body.nationality;
-  newAuthor.biography = req.body.biography; */
+  newAuthor.biography = req.body.biography; 
+  */
 
   let result: InsertResult = new InsertResult();
   try {

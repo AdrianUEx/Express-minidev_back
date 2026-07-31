@@ -1,6 +1,6 @@
 // * Interception of requests directed to Book
 
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import { deleteBook, getBook, getBooks, registerBook, updateBook } from "../controllers/book";
 
 export const bookRouter = Router();

@@ -8,6 +8,7 @@ const ormAuthorRepository = orm.getRepository(TypeORMAuthor);
 
 // * This repository implements the real operations using the ORM. Thus, it follows the implementation of the interface defined in the Domain Layer but retrieves the ORM instance as well as the operations from the ORM's .getRepository() method
 export class AuthorRepository implements AuthorRepositoryInterface {
+  
   constructor() {}
 
   async find(): Promise<Author[]> {
@@ -52,14 +53,14 @@ export class AuthorRepository implements AuthorRepositoryInterface {
     newAuthor.nationality = author.nationality;
     newAuthor.biography = author.biography;
 
-    let insertResult = await ormAuthorRepository.insert(newAuthor);
+    const insertResult = await ormAuthorRepository.insert(newAuthor);
   }
 
   async update(author: Author): Promise<void> {
-    let updateResult = await ormAuthorRepository.update(author.id, author);
+    const updateResult = await ormAuthorRepository.update(author.id, author);
   }
 
   async delete(id: number): Promise<void> {
-    let deleteResult = await ormAuthorRepository.delete(id);
+    const deleteResult = await ormAuthorRepository.delete(id);
   }
 }

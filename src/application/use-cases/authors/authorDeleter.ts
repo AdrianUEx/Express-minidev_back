@@ -8,11 +8,11 @@ export class AuthorDeleter {
         this.repository = repository;
     }
 
-    run(id: number): void {
-       let result = this.repository.findById(id);
+    async run(id: number): Promise<void> {
+       let result = await this.repository.findById(id);
         if(result === null) {
             throw new Error(`Author with id ${id} not found`);
         }
-        this.repository.delete(id);
+        await this.repository.delete(id);
     }
 }
