@@ -9,9 +9,9 @@ export class AuthorFinder {
     this.authorRepository = authorRepository;
   }
 
-  run(id: number): Author | null {
+  async run(id: number): Promise<Author | null> {
     //Use DB operations
-    let author = this.authorRepository.findById(id);
+    let author = await this.authorRepository.findById(id);
     if(author === null) {
       throw new Error(`Author with id ${id} not found`);
     }

@@ -1,6 +1,6 @@
 // * Method list to intercept requests oriented to Book entity management
 import { Request, Response } from "express";
-import { AppDataSource } from "../../infrastructure/data-source";
+import { AppDataSource } from "../../infrastructure/persistence/data-source";
 import { TypeORMBook } from "../entities/typeOrmBook";
 import { InsertResult } from "typeorm";
 import { UpdateResult } from "typeorm/browser";

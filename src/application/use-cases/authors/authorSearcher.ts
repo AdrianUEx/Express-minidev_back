@@ -7,21 +7,12 @@ export class AuthorSearcher {
     this.authorRepository = authorRepository;
   }
 
-  run(): Author[] {
+  async run(): Promise<Author[]> {
     //Use DB operations
-    let authorsFound = this.authorRepository.find();
+    let authorsFound = await this.authorRepository.find();
     if (authorsFound.length === 0) {
       return [];
     }
-
-/*     let mappedAuthors: Author[] = authorsFound.map((current, index) => {
-      current.id = authorsFound[index].id;
-      current.name = authorsFound[index].name;
-      current.lastname = authorsFound[index].lastname;
-      current.birthDate = authorsFound[index].birthDate;
-      current.nationality = authorsFound[index].nationality;
-      current.biography = authorsFound[index].biography;
-    }); */
     
     return authorsFound;
   }

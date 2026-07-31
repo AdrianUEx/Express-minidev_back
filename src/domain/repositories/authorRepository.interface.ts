@@ -4,13 +4,13 @@ import { Author } from "../models/author";
 // * This interface is only the contract for the operations allowed to be performed on the Author.
 export interface AuthorRepositoryInterface {
 
-    find(): Author[];
+    find(): Promise<Author[]>;
 
-    findById(id: number): Author | null;
+    findById(id: number): Promise<Author | null>;
 
-    create(author: Author): void;
+    create(author: Author): Promise<void>;
 
-    update(author: Author): void;
+    update(author: Author): Promise<void>;
 
-    delete(id: number): void;
+    delete(id: number): Promise<void>;
 }

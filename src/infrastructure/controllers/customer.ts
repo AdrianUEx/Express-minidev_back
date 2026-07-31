@@ -1,7 +1,7 @@
 // * Method list to intercept requests oriented toTypeORMCustomerentity management
 import { Request, Response } from "express";
 import { TypeORMCustomer } from "../entities/typeOrmCustomer";
-import { AppDataSource } from "../data-source";
+import { AppDataSource } from "../persistence/data-source";
 import { InsertResult } from "typeorm";
 
 const orm = AppDataSource;

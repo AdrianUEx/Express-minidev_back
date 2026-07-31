@@ -1,6 +1,6 @@
 import { Author } from "../../../domain/models/author";
 import { AuthorRepositoryInterface } from "../../../domain/repositories/authorRepository.interface";
-import { AppDataSource } from "../../data-source";
+import { AppDataSource } from "../../persistence/data-source";
 import { TypeORMAuthor } from "../../entities/typeOrmAuthor";
 
 const orm = AppDataSource;
@@ -10,8 +10,9 @@ const ormAuthorRepository = orm.getRepository(TypeORMAuthor);
 export class AuthorRepository implements AuthorRepositoryInterface {
   constructor() {}
 
-  async find(): Author[] {
+  async find(): Promise<Author[]> {
     let foundAuthors = await ormAuthorRepository.find();
+
     return foundAuthors.map((current) => {
       let author: Author = new Author();
       author.id = current.id;
@@ -24,13 +25,41 @@ export class AuthorRepository implements AuthorRepositoryInterface {
     });
   }
 
-  findById(id: number): Author | null {
+  async findById(id: number): Promise<Author | null> {
+    let foundAuthor: TypeORMAuthor | null = await ormAuthorRepository.findOneBy({ id: id });
+    console.log("Author encontrado: ", foundAuthor);
+
+    if (foundAuthor) {
+      let mappedAuthor: Author = new Author();
+      mappedAuthor.id = foundAuthor.id;
+      mappedAuthor.name = foundAuthor.name;
+      mappedAuthor.lastname = foundAuthor.lastname;
+      mappedAuthor.birthDate = foundAuthor.birthDate;
+      mappedAuthor.nationality = foundAuthor.nationality;
+      mappedAuthor.biography = foundAuthor.biography;
+
+      return mappedAuthor;
+    }
+
     return null;
   }
 
-  create(author: Author): void {}
+  async create(author: Author): Promise<void> {
+    let newAuthor: TypeORMAuthor = new TypeORMAuthor();
+    newAuthor.name = author.name;
+    newAuthor.lastname = author.lastname;
+    newAuthor.birthDate = author.birthDate;
+    newAuthor.nationality = author.nationality;
+    newAuthor.biography = author.biography;
 
-  update(author: Author): void {}
+    let insertResult = await ormAuthorRepository.insert(newAuthor);
+  }
 
-  delete(id: number): void {}
+  async update(author: Author): Promise<void> {
+    let updateResult = await ormAuthorRepository.update(author.id, author);
+  }
+
+  async delete(id: number): Promise<void> {
+    let deleteResult = await ormAuthorRepository.delete(id);
+  }
 }

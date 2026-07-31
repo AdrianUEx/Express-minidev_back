@@ -1,12 +1,13 @@
 // * Method list to intercept requests oriented toTypeORMAuthorentity management
 
 import { Request, Response } from "express";
-import { AppDataSource } from "../../infrastructure/data-source";
+import { AppDataSource } from "../../infrastructure/persistence/data-source";
 import { TypeORMAuthor } from "../entities/typeOrmAuthor";
 import { InsertResult, UpdateResult } from "typeorm";
 import { AuthorDeleter } from "../../application/use-cases/authors/authorDeleter";
 import { AuthorRepository } from "../repositories/typeorm/authorRepository";
 import { AuthorSearcher } from "../../application/use-cases/authors/authorSearcher";
+import { AuthorFinder } from "../../application/use-cases/authors/authorFinder";
 
 const orm = AppDataSource;
 //const authorRepository = orm.getRepository(TypeORMAuthor);
@@ -18,7 +19,7 @@ export async function getAuthors(req: Request, res: Response) {
 
   try {
     // authorList = await authorRepository.find();
-    authorList = useCase.run();
+    authorList = await useCase.run();
 
     res.status(200).send({ authorList });
   } catch (err) {
@@ -37,11 +38,11 @@ export async function getAuthor(req: Request, res: Response) {
     const authorId = req.params.id; // '.params' returns string values
     console.log(authorId);
 
-    author = await authorRepository.findOneBy({
+    /*     author = await authorRepository.findOneBy({
       id: Number.parseInt(authorId),
-    }); // * Supposing id comes from frontend in the URL. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
-
-    console.log(author);
+    }); */ // * Supposing id comes from frontend in the URL. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
+    const useCase = new AuthorFinder(authorRepository);
+    author = await useCase.run(Number.parseInt(authorId));
 
     res.status(200).send({ author });
   } catch (err) {
@@ -64,7 +65,9 @@ export async function signUpAuthor(req: Request, res: Response) {
 
   let result: InsertResult = new InsertResult();
   try {
-    result = await authorRepository.insert(newAuthor); // .save() can also be used instead of .insert(), but .insert() is more specialized
+    //result = await authorRepository.insert(newAuthor); // .save() can also be used instead of .insert(), but .insert() is more specialized
+    await authorRepository.create(newAuthor);
+
     res.status(201).send("Author inserted successfully");
   } catch (err) {
     if (!newAuthor) {
@@ -79,11 +82,13 @@ export async function updateAuthor(req: Request, res: Response) {
   const author: TypeORMAuthor = req.body; // What it is received from the frontend to send to the DB
 
   try {
-    const authorResult: UpdateResult = await authorRepository.update(
+    /*     const authorResult: UpdateResult = await authorRepository.update(
       req.params.id,
       author,
-    );
-    res.status(200).send(`Author updated successfully: ${authorResult}`);
+    ); */
+    await authorRepository.update(author);
+
+    res.status(200);
   } catch (err) {
     if (!author) {
       res.status(404).send("Author not found for updating");

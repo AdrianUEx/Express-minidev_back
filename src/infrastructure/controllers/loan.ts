@@ -1,6 +1,6 @@
 // * Method list to intercept requests oriented to Loan entity management
 import { Request, Response } from "express";
-import { AppDataSource } from "../data-source";
+import { AppDataSource } from "../persistence/data-source";
 import { TypeORMLoan } from "../entities/typeOrmLoan";
 import { LoanState } from "../../domain/models/loan";
 

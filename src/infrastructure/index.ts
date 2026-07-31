@@ -1,8 +1,8 @@
 import express, { NextFunction, Request, Response } from "express";
 import "reflect-metadata";
 
-// Inferior layers dependencies
-import { initializeDatabase } from "./data-source";
+// Infrastructure Layer dependencies
+import { initializeDatabase } from "./persistence/data-source";
 import { authorRouter } from "../infrastructure/routes/author";
 import { bookRouter } from "../infrastructure/routes/book";
 import { customerRouter } from "../infrastructure/routes/customer";
@@ -68,7 +68,7 @@ app.post("/upload", upload.single("file"), directUpload);
 // * upload from directory with Multer (dependency for 'multipart/form-data'). I added support for several files with same columns (same content structure)
 app.post("/uploads", upload.array("file"), fromRequestUpload);
 
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript server is running");
 });
 
