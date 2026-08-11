@@ -4,13 +4,13 @@ import { Customer } from "../models/customer";
 // * This interface is only the contract for the operations allowed to be performed on the Customer.
 export interface CustomerRepositoryInterface {
 
-    find(): Customer[];
+    find(): Promise<Customer[]>;
 
-    findById(id: number): Customer | null;
+    findById(id: number): Promise<Customer | null>;
 
-    create(author: Customer): void;
+    create(customer: Customer): Promise<void>;
 
-    update(author: Customer): void;
+    update(requestId: number, customer: Customer): Promise<void>;
 
-    delete(id: number): void;
+    delete(id: number): Promise<void>;
 }

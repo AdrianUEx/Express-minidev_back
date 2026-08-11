@@ -3,86 +3,68 @@ import { Request, Response } from "express";
 import { TypeORMCustomer } from "../entities/typeOrmCustomer";
 import { AppDataSource } from "../persistence/data-source";
 import { InsertResult } from "typeorm";
+import { CustomerRepository } from "../repositories/typeorm/customerRepository";
+import { CustomerFinder } from "../../application/use-cases/customers/customerFinder";
+import { CustomerSearcher } from "../../application/use-cases/customers/customerSearcher";
+import { CustomerCreator } from "../../application/use-cases/customers/customerCreator";
+import { CustomerUpdater } from "../../application/use-cases/customers/customerUpdater";
+import { CustomerDeleter } from "../../application/use-cases/customers/customerDeleter";
 
-const orm = AppDataSource;
-const customerRepository = orm.getRepository(TypeORMCustomer);
+const customerRepository: CustomerRepository = new CustomerRepository();
 
 export async function getCustomers(req: Request, res: Response) {
   let customerList: TypeORMCustomer[] = [];
+  const useCase = new CustomerSearcher(customerRepository);
 
-  try {
-    customerList = await customerRepository.find(); // * .find() without arguments executes a SELECT * FROM "Customer"; query, whereTypeORMCustomeris the database table
-
-    res.status(200).send({ customerList });
-  } catch (err){
-    if (customerList.length === 0) {
-      res.status(404).send("Customer list not found");
-    } else {
-      res.status(400).send("Bad Request from the client");
-    }
-  }
+  // customerList = await customerRepository.find(); // * .find() without arguments executes a SELECT * FROM "Customer"; query, whereTypeORMCustomeris the database table
+  customerList = await useCase.run();
+  res.status(200).send({ customerList });
 }
 
 export async function getCustomer(req: Request, res: Response) {
-  let customer:TypeORMCustomer| null = null;
-  try {
-    customer = await customerRepository.findOneBy({ id: Number.parseInt(req.params.id) }); // * Supposing id comes from fronted somehow. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
-    res.status(200).send({ customer });
-  } catch (err){
-    if (!customer) {
-      res.status(404).send("Customer not found");
-    } else {
-      res.status(400).send("Bad Request from the client");
-    }
-  }
+  let customer: TypeORMCustomer | null = null;
+  const useCase = new CustomerFinder(customerRepository);
+
+  /*     customer = await customerRepository.findOneBy({
+      id: Number.parseInt(req.params.id),
+    });  */ // * Supposing id comes from fronted somehow. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
+
+  customer = await useCase.run(Number.parseInt(req.params.id));
+
+  res.status(200).send({ customer });
 }
 
 export async function signUpCustomer(req: Request, res: Response) {
-  const newCustomer = req.body; // * This is the JSON of a newTypeORMCustomercoming from a form or similar.
+  const useCase = new CustomerCreator(customerRepository);
+
+  const newCustomer: TypeORMCustomer = req.body; // * This is the JSON of a newTypeORMCustomercoming from a form or similar.
   // ! done like this on purpose in case it needs to be changed later.
   newCustomer.name = req.body.name;
   newCustomer.lastname = req.body.lastname;
   newCustomer.phone = req.body.phone;
   newCustomer.registrationDate = req.body.registrationDate;
 
-  try {
-    await customerRepository.insert(newCustomer); // .save() can also be used instead of .insert(), but .insert() is more specialized
+  // await customerRepository.insert(newCustomer);
 
-    res.status(201).send("Customer inserted successfully");
-  } catch (err) {
-    if (!newCustomer) {
-      res.status(400).send(`Customer not found. ${err}`);
-    } else {
-      res.status(404).send(`Bad Request from the client. ${err}`);
-    }
-  }
+  await useCase.run(newCustomer);
+  res.status(201).send("Customer inserted successfully");
 }
 
 export async function updateCustomer(req: Request, res: Response) {
   let customer = req.body;
+  const useCase = new CustomerUpdater(customerRepository);
 
-  try {
-    customer = await customerRepository.update(req.params.id, customer);
-    res.status(200).send(`Customer updated successfully`);
-  } catch (err){
-    if (!customer) {
-      res.status(404).send("Customer not found for updating");
-    } else {
-      res.status(400).send(`Bad Request from client. ${err}`);
-    }
-  }
+  //customer = await customerRepository.update(req.params.id, customer);
+  await useCase.run(Number.parseInt(req.params.id), customer);
+  res.status(200).send(`Customer updated successfully`);
 }
 
 export async function deleteCustomer(req: Request, res: Response) {
   const customerId = req.params.id;
-  try {
-    await customerRepository.delete(customerId);
-    res.status(200).send("Customer deleted successfully");
-  } catch (err){
-    if (!customerId) {
-      res.status(400).send("Bad Request from client");
-    } else {
-      res.status(404).send("Customer not found for deleting");
-    }
-  }
+  const useCase = new CustomerDeleter(customerRepository);
+
+  // await customerRepository.delete(customerId);
+
+  await useCase.run(Number.parseInt(customerId));
+  res.status(200).send("Customer deleted successfully");
 }
