@@ -1,102 +1,71 @@
 // * Method list to intercept requests oriented to Book entity management
 import { Request, Response } from "express";
-import { AppDataSource } from "../../infrastructure/persistence/data-source";
 import { TypeORMBook } from "../entities/typeOrmBook";
 import { InsertResult } from "typeorm";
 import { UpdateResult } from "typeorm/browser";
+import { BookRepository } from "../repositories/typeorm/bookRepository";
+import { BookFinder } from "../../application/use-cases/books/bookFinder";
+import { BookSearcher } from "../../application/use-cases/books/bookSearcher";
+import { BookCreator } from "../../application/use-cases/books/bookCreator";
+import { BookUpdater } from "../../application/use-cases/books/bookUpdater";
+import { BookDeleter } from "../../application/use-cases/books/bookDeleter";
 
-const orm = AppDataSource;
-const bookRepository = orm.getRepository(TypeORMBook);
+const bookRepository: BookRepository = new BookRepository();
 
 export async function getBooks(req: Request, res: Response) {
   let bookList: TypeORMBook[] = [];
+  const useCase = new BookSearcher(bookRepository);
 
-  try {
-    bookList = await bookRepository.find();
-    res.status(200).send({ bookList });
-  } catch (err) {
-    if (bookList.length === 0) {
-      res.status(404).send("Book list not found");
-    } else {
-      res.status(400).send("Bad Request from the client");
-    }
-  }
+  //bookList = await bookRepository.find();
+  bookList = await useCase.run();
+
+  res.status(200).send({ bookList });
 }
 
 export async function getBook(req: Request, res: Response) {
   let book: TypeORMBook | null = null;
+  const useCase = new BookFinder(bookRepository);
 
-  try {
-    const bookId: string = req.params.id;
-    book = await bookRepository.findOneBy({ isbn: Number.parseInt(bookId) }); // * Supposing id comes from frontend somehow. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
+  const bookId: string = req.params.id;
 
-    res.status(200).send({ book });
-  } catch (err) {
-    if (!book) {
-      res.status(404).send("Book not found");
-    } else {
-      res.status(400).send("Bad Request from the client");
-    }
-  }
+  //book = await bookRepository.findOneBy({ isbn: Number.parseInt(bookId) }); // * Supposing id comes from frontend somehow. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
+  book = await useCase.run(Number.parseInt(bookId));
+
+  res.status(200).send({ book });
 }
 
 export async function registerBook(req: Request, res: Response) {
-  let newBook: TypeORMBook = req.body; // * This is the JSON of a new Book coming from a form or similar.
-  console.log(newBook);
+  const newBook: TypeORMBook = req.body; // * This is the JSON of a new Book coming from a form or similar.
+  console.log("Incoming book: ", newBook);
 
   let result: InsertResult = new InsertResult();
+  const useCase = new BookCreator(bookRepository);
 
-  try {
-    // * SELECT * FROM books WHERE title = [titulo] AND author = [id del autor]
-    const existingBook: TypeORMBook | null = await bookRepository.findOneBy({
-      title: newBook.title,
-     /*  author: newBook.author.id, */
-    });
-    console.log(existingBook)
-    if (!existingBook) {
-      // ! insert() inserta eternamente asignando un nuevo id en lugar de comprobar primero si ya existe. Tal vez habría que hacer que el título fuese PK compuesta junto al id o marcarlos a ambos con UNIQUE usando @Unique({[... , ...]}).
-      result = await bookRepository.insert(newBook); // .save() can also be used instead of .insert(), but .insert() is more specialized
+  // ! insert() inserts infinitely asigning a new id instead of checking first if it already exists. Maybe we should make the title a composite PK along with the id or mark both with UNIQUE using @Unique({[... , ...]}).
+  //result = await bookRepository.insert(newBook);
+  await useCase.run(newBook);
 
-      res.status(201).send("Book inserted successfully");
-    }else{
-      throw Error
-    }
-
-  } catch (err) {
-    if (!newBook) {
-      res.status(404).send("Book not found for inserting");
-    } else {
-      res.status(400).send(`Bad Request from the client ${err}`);
-    }
-  }
+  res.status(201).send("Book inserted successfully");
 }
 
 export async function updateBook(req: Request, res: Response) {
-  const book: TypeORMBook = req.body; // Without typing to allow object manipulation
+  const book: TypeORMBook = req.body;
+  const useCase = new BookUpdater(bookRepository);
+  /*     const bookResult: UpdateResult = await bookRepository.update(
+      req.params.id,
+      book,
+    ); */
+  await useCase.run(Number.parseInt(req.params.id), book);
 
-  try {
-    const bookResult: UpdateResult = await bookRepository.update(req.params.id, book);
-    res.status(200).send(`Book updated successfully`);
-  } catch (err) {
-    if (!book) {
-      res.status(404).send("Book not found");
-    } else {
-      res.status(400).send("Bad Request from the client");
-    }
-  }
+  res.status(200).send(`Book updated successfully`);
 }
 
 export async function deleteBook(req: Request, res: Response) {
   const bookId: string = req.params.id; // '.params' return string values
+  const useCase = new BookDeleter(bookRepository);
 
-  try {
-    await bookRepository.delete(bookId);
-    res.status(200).send("Book deleted successfully");
-  } catch (err) {
-    if (!bookId) {
-      res.status(404).send("Book not found");
-    } else {
-      res.status(400).send("Bad Request from the client");
-    }
-  }
+  //await bookRepository.delete(bookId);
+  await useCase.run(Number.parseInt(bookId));
+
+  res.status(200).send("Book deleted successfully");
 }

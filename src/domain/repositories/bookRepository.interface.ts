@@ -4,13 +4,13 @@ import { Book } from "../models/book";
 // * This interface is only the contract for the operations allowed to be performed on the Book.
 export interface BookRepositoryInterface {
 
-    find(): Book[];
+    find(): Promise<Book[]>;
 
-    findById(id: number): Book | null;
+    findById(id: number): Promise<Book | null>;
 
-    create(author: Book): void;
+    create(author: Book): Promise<void>;
 
-    update(author: Book): void;
+    update(requestId: number, book: Book): Promise<void>;
 
-    delete(id: number): void;
+    delete(id: number): Promise<void>;
 }

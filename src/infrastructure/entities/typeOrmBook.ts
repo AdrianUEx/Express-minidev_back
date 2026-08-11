@@ -25,5 +25,5 @@ export class TypeORMBook {
     
     @ManyToOne(() => TypeORMAuthor)
     @JoinColumn({name: "id"}) // * Where you use JoinColumn, there is registered the relation id and also the foreign key of the relation with the other table, just like in SpringBoot
-    author: TypeORMAuthor;
+    author: TypeORMAuthor; // If you try to introduce a new Book in the DB, you can (and should) use the author id. TypeORM will automatically find the author using the @JoinColumn({...}) and TypeORMAuthor Entity within @ManyToOne() Decorator and map it to the BD so it will work seamlessly.
 }
