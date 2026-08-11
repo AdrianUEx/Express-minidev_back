@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
 
 
-@Entity()
+@Entity({name: "customer"}) // Database table name. If not specified, the table name will be the same as the class name. If that classname is changed, queries will fail without throwing error, because TypeORM will not find the existing entity by that new name.
 export class TypeORMCustomer {
 
     @PrimaryGeneratedColumn() // * Every Entity must have a primary key. Using Generated this key is autoincremented 

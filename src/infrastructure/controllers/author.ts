@@ -8,8 +8,10 @@ import { AuthorDeleter } from "../../application/use-cases/authors/authorDeleter
 import { AuthorRepository } from "../repositories/typeorm/authorRepository";
 import { AuthorSearcher } from "../../application/use-cases/authors/authorSearcher";
 import { AuthorFinder } from "../../application/use-cases/authors/authorFinder";
+import { AuthorCreator } from "../../application/use-cases/authors/authorCreator";
+import { AuthorUpdater } from "../../application/use-cases/authors/authorUpdater";
 
-const orm = AppDataSource;
+//const orm = AppDataSource;
 //const authorRepository = orm.getRepository(TypeORMAuthor);
 const authorRepository: AuthorRepository = new AuthorRepository();
 
@@ -17,41 +19,24 @@ export async function getAuthors(req: Request, res: Response) {
   let authorList: TypeORMAuthor[] = [];
   const useCase = new AuthorSearcher(authorRepository);
 
-  try {
-    // authorList = await authorRepository.find();
-    authorList = await useCase.run();
+  // authorList = await authorRepository.find();
+  authorList = await useCase.run();
 
-    res.status(200).send({ authorList });
-  } catch (err) {
-    if (authorList.length === 0) {
-      res.status(404).send("Author list not found");
-    } else {
-      res.status(400).send("Bad Request from the client");
-    }
-  }
+  res.status(200).send({ authorList });
 }
 
 export async function getAuthor(req: Request, res: Response) {
   let author: TypeORMAuthor | null = null;
+  const authorId: string = req.params.id; // '.params' returns string values
+  console.log("Id de parámetros: ", authorId);
 
-  try {
-    const authorId = req.params.id; // '.params' returns string values
-    console.log(authorId);
-
-    /*     author = await authorRepository.findOneBy({
+  /*     author = await authorRepository.findOneBy({
       id: Number.parseInt(authorId),
     }); */ // * Supposing id comes from frontend in the URL. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
-    const useCase = new AuthorFinder(authorRepository);
-    author = await useCase.run(Number.parseInt(authorId));
+  const useCase = new AuthorFinder(authorRepository);
+  author = await useCase.run(Number.parseInt(authorId));
 
-    res.status(200).send({ author });
-  } catch (err) {
-    if (!author) {
-      res.status(404).send("Author not found");
-    } else {
-      res.status(400).send("Bad Request from the client");
-    }
-  }
+  res.status(200).send({ author });
 }
 
 export async function signUpAuthor(req: Request, res: Response) {
@@ -66,52 +51,33 @@ export async function signUpAuthor(req: Request, res: Response) {
   */
 
   let result: InsertResult = new InsertResult();
-  try {
-    //result = await authorRepository.insert(newAuthor); // .save() can also be used instead of .insert(), but .insert() is more specialized
-    await authorRepository.create(newAuthor);
+  //result = await authorRepository.insert(newAuthor); // .save() can also be used instead of .insert(), but .insert() is more specialized
+  //await authorRepository.create(newAuthor);
 
-    res.status(201).send("Author inserted successfully");
-  } catch (err) {
-    if (!newAuthor) {
-      res.status(404).send(`Author not found for inserting ${result}`);
-    } else {
-      res.status(400).send("Bad Request from the client");
-    }
-  }
+  const useCase = new AuthorCreator(authorRepository);
+  useCase.run(newAuthor);
+
+  res.status(201).send("Author inserted successfully");
 }
 
 export async function updateAuthor(req: Request, res: Response) {
   const author: TypeORMAuthor = req.body; // What it is received from the frontend to send to the DB
+  const useCase = new AuthorUpdater(authorRepository);
 
-  try {
-    /*     const authorResult: UpdateResult = await authorRepository.update(
+  /*     const authorResult: UpdateResult = await authorRepository.update(
       req.params.id,
       author,
     ); */
-    await authorRepository.update(author);
 
-    res.status(200);
-  } catch (err) {
-    if (!author) {
-      res.status(404).send("Author not found for updating");
-    } else {
-      res.status(400).send("Bad Request from the client");
-    }
-  }
+  await useCase.run(Number.parseInt(req.params.id), author); // Here it can't be only the author because that would mean that the client has COMPLETE information about the author and can modify it, so the id must come from a separate source.
+
+  res.status(200).send("Author updated successfully");
 }
 
 export async function deleteAuthor(req: Request, res: Response) {
   const authorId: string = req.params.id; // '.params' returns string values
   const useCase: AuthorDeleter = new AuthorDeleter(authorRepository);
 
-  try {
-    await useCase.run(Number.parseInt(authorId)); // * This is the use case that will delete the author with the given id. It will throw an error if the author is not found.
-    res.status(204).send();
-  } catch (err) {
-    if (!authorId) {
-      res.status(400).send("Bad Request from the client");
-    } else {
-      res.status(404).send("Author not found for deleting");
-    }
-  }
+  await useCase.run(Number.parseInt(authorId)); // * This is the use case that will delete the author with the given id. It will throw an error if the author is not found.
+  res.status(204).send("Author deleted successfully");
 }

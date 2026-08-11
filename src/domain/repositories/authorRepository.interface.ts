@@ -10,7 +10,7 @@ export interface AuthorRepositoryInterface {
 
     create(author: Author): Promise<void>;
 
-    update(author: Author): Promise<void>;
+    update(requestId: number, author: Author): Promise<void>;
 
     delete(id: number): Promise<void>;
 }

@@ -11,7 +11,7 @@ import { TypeORMCustomer } from "./typeOrmCustomer";
 import { TypeORMBook } from "./typeOrmBook";
 import { LoanState } from "../../domain/models/loan";
 
-@Entity()
+@Entity({name: "loan"}) // Database table name. If not specified, the table name will be the same as the class name. If that classname is changed, queries will fail without throwing error, because TypeORM will not find the existing entity by that new name.
 export class TypeORMLoan {
 
   @PrimaryGeneratedColumn() // * Every Entity must have a primary key. Using Generated this key is autoincremented 
