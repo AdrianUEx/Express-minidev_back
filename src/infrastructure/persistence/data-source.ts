@@ -11,17 +11,18 @@ import { TypeORMLoan } from "../../infrastructure/entities/typeOrmLoan";
 
 export const AppDataSource = new DataSource({
     type: "postgres",
+    // ! if you want to use Supabase, then you must use the url property instead of host, port, username, password and database properties. The url property is simply the connection string that you can get from the supabase dashboard, and it is made by these properties, that's why you don't need them.
     host: "localhost",
     port: 5432,
     username: "devuser",
     password: "password",
     database: "books",
+
     synchronize: true, // * this property must be false when using migrations to not synchronize schemas automatically
     logging: true,
     entities: [TypeORMAuthor, TypeORMBook, TypeORMCustomer, TypeORMLoan],
     subscribers: [],
-    migrations: ["/migrations"], // * This line, along 'synchronize: false', it's the basic setup for migrations
-
+    migrations: ["src/infrastructure/persistence/migrations"], // * This line, along 'synchronize: false', it's the basic setup for migrations
 
     // optional
    /*  migrationsRun: false, // * specifies whether migrations should run automatically when the application is launched. The default value is false

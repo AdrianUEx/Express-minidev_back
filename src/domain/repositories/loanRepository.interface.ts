@@ -4,13 +4,13 @@ import {Loan} from "../models/loan";
 // * This interface is only the contract for the operations allowed to be performed on the Loan.
 export interface LoanRepositoryInterface {
 
-    find(): Loan[];
+    find(): Promise<Loan[]>;
 
-    findById(id: number): Loan | null;
+    findById(id: number): Promise<Loan | null>;
 
-    create(author: Loan): void;
+    create(author: Loan): Promise<void>;
 
-    update(author: Loan): void;
+    update(requestId: number, loan: Loan): Promise<void>;
 
-    delete(id: number): void;
+    delete(id: number): Promise<void>;
 }
