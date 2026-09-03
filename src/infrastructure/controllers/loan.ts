@@ -1,15 +1,13 @@
-// * Method list to intercept requests oriented to Loan entity management
+// * Method list to intercept requests oriented to TypeORMLoan entity management
 import { Request, Response } from "express";
 import { TypeORMLoan } from "../entities/typeOrmLoan";
-import { LoanState } from "../../domain/models/loan";
 import { LoanCreator } from "../../application/use-cases/loans/loanCreator";
-import { LoanRepository } from "../repositories/typeorm/loanRepository";
 import { LoanSearcher } from "../../application/use-cases/loans/loanSearcher";
 import { LoanFinder } from "../../application/use-cases/loans/loanFinder";
 import { LoanUpdater } from "../../application/use-cases/loans/loanUpdater";
 import { LoanDeleter } from "../../application/use-cases/loans/loanDeleter";
+import { loanRepository } from "./dependencies/controllerDependencies";
 
-const loanRepository: LoanRepository = new LoanRepository();
 
 export async function getLoans(req: Request, res: Response) {
   let loanList: TypeORMLoan[] = [];

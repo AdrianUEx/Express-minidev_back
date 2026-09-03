@@ -1,19 +1,17 @@
-// * Method list to intercept requests oriented toTypeORMAuthorentity management
-
+// * Method list to intercept requests oriented to TypeORMAuthor entity management. It handled the ORM operations literally in the prior version before implementing Clean Architecture.
 import { Request, Response } from "express";
-import { AppDataSource } from "../../infrastructure/persistence/data-source";
 import { TypeORMAuthor } from "../entities/typeOrmAuthor";
 import { InsertResult, UpdateResult } from "typeorm";
 import { AuthorDeleter } from "../../application/use-cases/authors/authorDeleter";
-import { AuthorRepository } from "../repositories/typeorm/authorRepository";
 import { AuthorSearcher } from "../../application/use-cases/authors/authorSearcher";
 import { AuthorFinder } from "../../application/use-cases/authors/authorFinder";
 import { AuthorCreator } from "../../application/use-cases/authors/authorCreator";
 import { AuthorUpdater } from "../../application/use-cases/authors/authorUpdater";
+import { authorRepository } from "./dependencies/controllerDependencies";
 
 //const orm = AppDataSource;
 //const authorRepository = orm.getRepository(TypeORMAuthor);
-const authorRepository: AuthorRepository = new AuthorRepository();
+//const authorRepository: AuthorRepository = new AuthorRepository();
 
 export async function getAuthors(req: Request, res: Response) {
   let authorList: TypeORMAuthor[] = [];

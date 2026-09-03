@@ -1,16 +1,15 @@
-// * Method list to intercept requests oriented to Book entity management
+// * Method list to intercept requests oriented to TypeORMBook entity management
 import { Request, Response } from "express";
 import { TypeORMBook } from "../entities/typeOrmBook";
 import { InsertResult } from "typeorm";
 import { UpdateResult } from "typeorm/browser";
-import { BookRepository } from "../repositories/typeorm/bookRepository";
 import { BookFinder } from "../../application/use-cases/books/bookFinder";
 import { BookSearcher } from "../../application/use-cases/books/bookSearcher";
 import { BookCreator } from "../../application/use-cases/books/bookCreator";
 import { BookUpdater } from "../../application/use-cases/books/bookUpdater";
 import { BookDeleter } from "../../application/use-cases/books/bookDeleter";
+import { bookRepository } from "./dependencies/controllerDependencies";
 
-const bookRepository: BookRepository = new BookRepository();
 
 export async function getBooks(req: Request, res: Response) {
   let bookList: TypeORMBook[] = [];

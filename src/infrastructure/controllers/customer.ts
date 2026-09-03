@@ -1,16 +1,14 @@
-// * Method list to intercept requests oriented toTypeORMCustomerentity management
+// * Method list to intercept requests oriented to TypeORMCustomer entity management
 import { Request, Response } from "express";
 import { TypeORMCustomer } from "../entities/typeOrmCustomer";
-import { AppDataSource } from "../persistence/data-source";
 import { InsertResult } from "typeorm";
-import { CustomerRepository } from "../repositories/typeorm/customerRepository";
 import { CustomerFinder } from "../../application/use-cases/customers/customerFinder";
 import { CustomerSearcher } from "../../application/use-cases/customers/customerSearcher";
 import { CustomerCreator } from "../../application/use-cases/customers/customerCreator";
 import { CustomerUpdater } from "../../application/use-cases/customers/customerUpdater";
 import { CustomerDeleter } from "../../application/use-cases/customers/customerDeleter";
+import { customerRepository } from "./dependencies/controllerDependencies";
 
-const customerRepository: CustomerRepository = new CustomerRepository();
 
 export async function getCustomers(req: Request, res: Response) {
   let customerList: TypeORMCustomer[] = [];
