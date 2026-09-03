@@ -39,6 +39,6 @@ export async function initializeDatabase() {
         await AppDataSource.initialize()
         console.log("Data Source from TypeORM has been initialized!")
     } catch (error) {
-        console.error("Error during Data Source initialization", error)
+        console.error("Error during Data Source initialization: ", error)
     }
 }

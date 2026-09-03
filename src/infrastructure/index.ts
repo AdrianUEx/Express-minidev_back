@@ -1,5 +1,6 @@
-import express, { NextFunction, Request, Response } from "express";
 import "reflect-metadata";
+import express, { NextFunction, Request, Response } from "express";
+
 
 // Infrastructure Layer dependencies
 import { initializeDatabase } from "./persistence/data-source";
