@@ -78,3 +78,5 @@ app.listen(port, async () => {
   await initializeDatabase();
   console.log(`Server listening on http://localhost:${port}`);
 });
+
+export default app;

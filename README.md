@@ -1,5 +1,5 @@
 # Minidev_back
-Proyecto de Express con TypeScript empleado como backend
+Proyecto de Express con TypeScript, empleado como backend desplegado localmente. Emplea Clean Architecture.
 
 
 ## Comandos para back de express:
