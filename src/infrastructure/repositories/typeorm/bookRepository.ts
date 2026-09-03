@@ -1,12 +1,11 @@
 import { Book } from "../../../domain/models/book";
 import { BookRepositoryInterface } from "../../../domain/repositories/bookRepository.interface";
-import { TypeORMAuthor } from "../../entities/typeOrmAuthor";
 import { TypeORMBook } from "../../entities/typeOrmBook";
 import { AppDataSource } from "../../persistence/data-source";
+import { ormBookRepository } from "./dependencies/repositoryDependencies";
 
-const orm = AppDataSource;
-const ormBookRepository = orm.getRepository(TypeORMBook);
 
+// * This repository implements the real operations using the ORM. Thus, it follows the implementation of the interface defined in the Domain Layer but retrieves the ORM instance as well as the operations from the ORM's .getRepository() method
 export class BookRepository implements BookRepositoryInterface {
   constructor() {}
 

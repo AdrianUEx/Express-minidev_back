@@ -2,9 +2,8 @@ import { Loan } from "../../../domain/models/loan";
 import { LoanRepositoryInterface } from "../../../domain/repositories/loanRepository.interface";
 import { TypeORMLoan } from "../../entities/typeOrmLoan";
 import { AppDataSource } from "../../persistence/data-source";
+import { ormLoanRepository } from "./dependencies/repositoryDependencies";
 
-const orm = AppDataSource;
-const ormLoanRepository = orm.getRepository(TypeORMLoan);
 
 export class LoanRepository implements LoanRepositoryInterface {
   constructor() {}

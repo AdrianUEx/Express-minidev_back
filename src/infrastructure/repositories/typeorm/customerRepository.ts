@@ -2,9 +2,8 @@ import { Customer } from "../../../domain/models/customer";
 import { CustomerRepositoryInterface } from "../../../domain/repositories/customerRepository.interface";
 import { TypeORMCustomer } from "../../entities/typeOrmCustomer";
 import { AppDataSource } from "../../persistence/data-source";
+import { ormCustomerRepository } from "./dependencies/repositoryDependencies";
 
-const orm = AppDataSource;
-const ormCustomerRepository = orm.getRepository(TypeORMCustomer);
 
 // * This repository implements the real operations using the ORM. Thus, it follows the implementation of the interface defined in the Domain Layer but retrieves the ORM instance as well as the operations from the ORM's .getRepository() method
 export class CustomerRepository implements CustomerRepositoryInterface {
