@@ -1,3 +1,4 @@
+import { ExceptionStore } from "../../../domain/exceptions/exceptionStore";
 import { Author } from "../../../domain/models/author";
 import { AuthorRepositoryInterface } from "../../../domain/repositories/authorRepository.interface";
 
@@ -13,7 +14,7 @@ export class AuthorFinder {
     //Use DB operations
     let author = await this.authorRepository.findById(id);
     if(author === null) {
-      throw new Error(`Author with id ${id} not found`);
+      throw new Error(ExceptionStore.EntityNotFoundException);
     }
     return author;
   }

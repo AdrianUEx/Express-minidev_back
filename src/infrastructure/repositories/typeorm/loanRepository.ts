@@ -5,6 +5,7 @@ import { AppDataSource } from "../../persistence/data-source";
 import { ormLoanRepository } from "./dependencies/repositoryDependencies";
 
 
+// * This repository implements the real operations using the ORM. Thus, it follows the implementation of the interface defined in the Domain Layer but retrieves the ORM instance as well as the operations from the ORM's .getRepository() method
 export class LoanRepository implements LoanRepositoryInterface {
   constructor() {}
 

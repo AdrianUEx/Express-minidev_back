@@ -1,3 +1,4 @@
+import { ExceptionStore } from "../../../domain/exceptions/exceptionStore";
 import { Loan } from "../../../domain/models/loan";
 import { LoanRepositoryInterface } from "../../../domain/repositories/loanRepository.interface";
 
@@ -12,7 +13,7 @@ export class LoanFinder {
     //Use DB operations
     let loan = await this.loanRepository.findById(id);
     if(loan === null) {
-      throw new Error(`Loan with id ${id} not found`);
+      throw new Error(ExceptionStore.EntityNotFoundException);
     }
     return loan;
   }

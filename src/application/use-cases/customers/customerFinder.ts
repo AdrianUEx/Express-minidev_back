@@ -1,3 +1,4 @@
+import { ExceptionStore } from "../../../domain/exceptions/exceptionStore";
 import { Customer } from "../../../domain/models/customer";
 import { CustomerRepositoryInterface } from "../../../domain/repositories/customerRepository.interface";
 
@@ -13,7 +14,7 @@ export class CustomerFinder {
     //Use DB operations
     let customer = await this.customerRepository.findById(id);
     if(customer === null) {
-      throw new Error(`Customer with id ${id} not found`);
+      throw new Error(ExceptionStore.EntityNotFoundException);
     }
     return customer;
   }

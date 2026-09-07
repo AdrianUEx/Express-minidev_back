@@ -2,4 +2,4 @@ The Domain Layer is the core of the application. Here there are the DTO, the DAO
 The data types are NOT @Entity, but types similar to @Entity to be used in superior layers in interfaces. This is done to abstract the controller, in the Infrastructure Layer,
 from the ORM used, in order to be easily replaceable.
 
-Technically, every superior layer can reference anything in the inferior layers, not bound strictly to communication one-on-one with the inmediately inferior layer, but we are doing it this way.
+Technically, every superior layer can reference anything in the inferior layers, not bound strictly to communication one-on-one with the inmediately inferior layer.
