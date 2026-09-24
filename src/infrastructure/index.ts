@@ -8,7 +8,7 @@ import { authorRouter } from "../infrastructure/routes/author";
 import { bookRouter } from "../infrastructure/routes/book";
 import { customerRouter } from "../infrastructure/routes/customer";
 import { loanRouter } from "../infrastructure/routes/loan";
-import { directUpload, fromRequestUpload } from "../infrastructure/controllers/upload";
+import { fromRequestUpload, uploadManager } from "../infrastructure/controllers/upload";
 // External dependencies
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -63,11 +63,12 @@ app.use("/authors", authorRoutes);
 app.use("/books", bookRoutes);
 app.use("/loans", loanRoutes);
 
-// * direct upload with Multer (dependency for 'multipart/form-data').
-app.post("/upload", upload.single("file"), directUpload);
+// * upload with Multer (dependency for 'multipart/form-data').
+app.post(["/upload", "/uploads"], upload.single("file"), uploadManager);
 
-// * upload from directory with Multer (dependency for 'multipart/form-data'). I added support for several files with same columns (same content structure)
-app.post("/uploads", upload.array("file"), fromRequestUpload);
+// * upload from directory with Multer (dependency for 'multipart/form-data'). I added support for several files with same columns (same content structure), but it was only necessary to upload one from the request.
+// * Uncomment if necessary to upload several files with same columns (same content structure) from the request. It would be necessary to change the controller function to handle several files.
+//app.post("/uploads", upload.array("file"), fromRequestUpload);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript server is running");
