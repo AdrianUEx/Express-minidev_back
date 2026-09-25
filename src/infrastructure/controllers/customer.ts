@@ -2,17 +2,15 @@
 import { Request, Response } from "express";
 import { TypeORMCustomer } from "../entities/typeOrmCustomer";
 import { InsertResult } from "typeorm";
-import { CustomerFinder } from "../../application/use-cases/customers/customerFinder";
-import { CustomerSearcher } from "../../application/use-cases/customers/customerSearcher";
-import { CustomerCreator } from "../../application/use-cases/customers/customerCreator";
-import { CustomerUpdater } from "../../application/use-cases/customers/customerUpdater";
-import { CustomerDeleter } from "../../application/use-cases/customers/customerDeleter";
+
+import * as customerUseCases from "../../application/use-cases/customers";
+
 import { customerRepository } from "./dependencies/controllerDependencies";
 
 
 export async function getCustomers(req: Request, res: Response) {
   let customerList: TypeORMCustomer[] = [];
-  const useCase = new CustomerSearcher(customerRepository);
+  const useCase = new customerUseCases.CustomerSearcher(customerRepository);
 
   // customerList = await customerRepository.find(); // * .find() without arguments executes a SELECT * FROM "Customer"; query, whereTypeORMCustomeris the database table
   customerList = await useCase.run();
@@ -21,7 +19,7 @@ export async function getCustomers(req: Request, res: Response) {
 
 export async function getCustomer(req: Request, res: Response) {
   let customer: TypeORMCustomer | null = null;
-  const useCase = new CustomerFinder(customerRepository);
+  const useCase = new customerUseCases.CustomerFinder(customerRepository);
 
   /*     customer = await customerRepository.findOneBy({
       id: Number.parseInt(req.params.id),
@@ -33,7 +31,7 @@ export async function getCustomer(req: Request, res: Response) {
 }
 
 export async function signUpCustomer(req: Request, res: Response) {
-  const useCase = new CustomerCreator(customerRepository);
+  const useCase = new customerUseCases.CustomerCreator(customerRepository);
 
   const newCustomer: TypeORMCustomer = req.body; // * This is the JSON of a newTypeORMCustomercoming from a form or similar.
   // ! done like this on purpose in case it needs to be changed later.
@@ -50,7 +48,7 @@ export async function signUpCustomer(req: Request, res: Response) {
 
 export async function updateCustomer(req: Request, res: Response) {
   let customer = req.body;
-  const useCase = new CustomerUpdater(customerRepository);
+  const useCase = new customerUseCases.CustomerUpdater(customerRepository);
 
   //customer = await customerRepository.update(req.params.id, customer);
   await useCase.run(Number.parseInt(req.params.id), customer);
@@ -59,7 +57,7 @@ export async function updateCustomer(req: Request, res: Response) {
 
 export async function deleteCustomer(req: Request, res: Response) {
   const customerId = req.params.id;
-  const useCase = new CustomerDeleter(customerRepository);
+  const useCase = new customerUseCases.CustomerDeleter(customerRepository);
 
   // await customerRepository.delete(customerId);
 

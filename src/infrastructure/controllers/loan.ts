@@ -1,17 +1,16 @@
 // * Method list to intercept requests oriented to TypeORMLoan entity management
 import { Request, Response } from "express";
 import { TypeORMLoan } from "../entities/typeOrmLoan";
-import { LoanCreator } from "../../application/use-cases/loans/loanCreator";
-import { LoanSearcher } from "../../application/use-cases/loans/loanSearcher";
-import { LoanFinder } from "../../application/use-cases/loans/loanFinder";
-import { LoanUpdater } from "../../application/use-cases/loans/loanUpdater";
-import { LoanDeleter } from "../../application/use-cases/loans/loanDeleter";
+
+import * as loanUseCases from "../../application/use-cases/loans";
+
 import { loanRepository } from "./dependencies/controllerDependencies";
+
 
 
 export async function getLoans(req: Request, res: Response) {
   let loanList: TypeORMLoan[] = [];
-  const useCase = new LoanSearcher(loanRepository);
+  const useCase = new loanUseCases.LoanSearcher(loanRepository);
 
   //loanList = await loanRepository.find();
 
@@ -21,7 +20,7 @@ export async function getLoans(req: Request, res: Response) {
 
 export async function getLoan(req: Request, res: Response) {
   let loan: TypeORMLoan | null = null;
-  const useCase = new LoanFinder(loanRepository);
+  const useCase = new loanUseCases.LoanFinder(loanRepository);
 
   const loanId = req.params.id;
   //loan = await loanRepository.findOneBy({ id: Number.parseInt(loanId) }); // * Supposing id comes from frontend somehow. We use Number.parseInt() instead of .parseInt() because it's more recent, although they are the same.
@@ -34,7 +33,7 @@ export async function getLoan(req: Request, res: Response) {
 // ? Review logic
 export async function createLoan(req: Request, res: Response) {
   const newLoan: TypeORMLoan = req.body; // * This is the JSON of a new Loan coming from a form or similar.
-  const useCase = new LoanCreator(loanRepository);
+  const useCase = new loanUseCases.LoanCreator(loanRepository);
 
   console.log(req.body);
 
@@ -47,7 +46,7 @@ export async function createLoan(req: Request, res: Response) {
 // ! Falla por algo de TypeORM. Es como si estuviese leyendo una relación mal, ya que el nombre de loanId no se encuentra en ninguna Entity ni tabla ni modelo de datos de dominio en este momento.
 export async function updateLoan(req: Request, res: Response) {
   let loan = req.body;
-  const useCase = new LoanUpdater(loanRepository);
+  const useCase = new loanUseCases.LoanUpdater(loanRepository);
 
   //loan = await loanRepository.update(req.params.id, loan);
   await useCase.run(Number.parseInt(req.params.id), loan);
@@ -57,7 +56,7 @@ export async function updateLoan(req: Request, res: Response) {
 
 export async function deleteLoan(req: Request, res: Response) {
   const loanId = req.params.id;
-  const useCase = new LoanDeleter(loanRepository);
+  const useCase = new loanUseCases.LoanDeleter(loanRepository);
 
   // await loanRepository.delete(loanId);
   await useCase.run(Number.parseInt(loanId));

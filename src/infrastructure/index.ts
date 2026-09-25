@@ -3,12 +3,10 @@ import express, { NextFunction, Request, Response } from "express";
 
 
 // Infrastructure Layer dependencies
+import * as controllerRoutes from "./routes";
 import { initializeDatabase } from "./persistence/data-source";
-import { authorRouter } from "../infrastructure/routes/author";
-import { bookRouter } from "../infrastructure/routes/book";
-import { customerRouter } from "../infrastructure/routes/customer";
-import { loanRouter } from "../infrastructure/routes/loan";
 import { fromRequestUpload, uploadManager } from "../infrastructure/controllers/upload";
+
 // External dependencies
 import bodyParser from "body-parser";
 import cors from "cors";
@@ -52,10 +50,10 @@ app.use(bodyParser.json());
 app.use(cors()); // needs npm i --save-dev @types/cors
 
 // * load routers
-const customerRoutes = customerRouter;
-const authorRoutes = authorRouter;
-const bookRoutes = bookRouter;
-const loanRoutes = loanRouter;
+const customerRoutes = controllerRoutes.customerRouter;
+const authorRoutes = controllerRoutes.authorRouter;
+const bookRoutes = controllerRoutes.bookRouter;
+const loanRoutes = controllerRoutes.loanRouter;
 
 // * basic routes for asigning the routers
 app.use("/customers", customerRoutes);
