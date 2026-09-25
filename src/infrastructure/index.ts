@@ -12,6 +12,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import "dotenv/config";
 import multer, { Multer } from "multer";
+import helmet from "helmet";
 
 
 // * Backend's main file. Every dependency and config is declared here: dependencies, database connection, etc. All that is important.
@@ -47,6 +48,9 @@ app.use(bodyParser.json());
   next();
 }); */
 app.use(cors()); // needs npm i --save-dev @types/cors
+
+// implement Helmet to add several headers to the responses for security purposes
+app.use(helmet());
 
 // * load routers
 const customerRoutes = controllerRoutes.customerRouter;
