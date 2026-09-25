@@ -1,8 +1,7 @@
 // * Method list to intercept requests oriented to TypeORMBook entity management
 import { Request, Response } from "express";
 import { TypeORMBook } from "../entities/typeOrmBook";
-import { InsertResult } from "typeorm";
-import { UpdateResult } from "typeorm/browser";
+import { InsertResult, UpdateResult } from "typeorm";
 
 import * as bookUseCases from "../../application/use-cases/books";
 

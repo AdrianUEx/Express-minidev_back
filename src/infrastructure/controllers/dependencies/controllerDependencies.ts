@@ -1,9 +1,7 @@
-import { AuthorRepository } from "../../repositories/typeorm/authorRepository";
-import { BookRepository } from "../../repositories/typeorm/bookRepository";
-import { CustomerRepository } from "../../repositories/typeorm/customerRepository";
-import { LoanRepository } from "../../repositories/typeorm/loanRepository";
+// Using Barrel Pattern from /repositories/typeorm
+import * as typeOrmRepositories from "../../repositories/typeorm"
 
-export const authorRepository: AuthorRepository = new AuthorRepository();
-export const bookRepository: BookRepository = new BookRepository();
-export const customerRepository: CustomerRepository = new CustomerRepository();
-export const loanRepository: LoanRepository = new LoanRepository();
+export const authorRepository: typeOrmRepositories.AuthorRepository = new typeOrmRepositories.AuthorRepository();
+export const bookRepository: typeOrmRepositories.BookRepository = new typeOrmRepositories.BookRepository();
+export const customerRepository: typeOrmRepositories.CustomerRepository = new typeOrmRepositories.CustomerRepository();
+export const loanRepository: typeOrmRepositories.LoanRepository = new typeOrmRepositories.LoanRepository();
