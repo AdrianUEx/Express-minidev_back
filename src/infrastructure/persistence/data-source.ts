@@ -2,42 +2,52 @@ import { DataSource } from "typeorm";
 
 import * as typeOrmEntities from "../entities";
 
-
 // * DataSource is what allows to establish connection with DB. Several can be declared depending on the databases to work with
 // * They are always executed by calling initalize() method and connection is hold until destroy() is called.
 // * The JSON inside DataSource() are the DataSourceOptions and they vary depending on the specified database in the "type" property in it.
-// * In order to use DataSource it must be first invoked in the main file (usually app.js/index.js). Then, you can recover that instance by invoking the .manager() or .getRepository() method 
+// * In order to use DataSource it must be first invoked in the main file (usually app.js/index.js). Then, you can recover that instance by invoking the .manager() or .getRepository() method
 
 export const AppDataSource = new DataSource({
-    type: "postgres",
-    // ! if you want to use Supabase, then you must use the url property instead of host, port, username, password and database properties. The url property is simply the connection string that you can get from the supabase dashboard, and it is made by these properties, that's why you don't need them.
-    host: "localhost",
-    port: 5432,
-    username: "devuser",
-    password: "password",
-    database: "books",
+  type: "postgres",
+  // ! if you want to use Supabase, then you must use the url property instead of host, port, username, password and database properties. The url property is simply the connection string that you can get from the supabase dashboard, and it is made by these properties, that's why you don't need them.
+  host: "localhost",
+  port: 5432,
+  username: "devuser",
+  password: "password",
+  database: "books",
 
-    synchronize: true, // * this property must be false when using migrations to not synchronize schemas automatically
-    logging: true,
-    entities: [typeOrmEntities.TypeORMAuthor, typeOrmEntities.TypeORMBook, typeOrmEntities.TypeORMCustomer, typeOrmEntities.TypeORMLoan],
-    subscribers: [],
-    migrations: ["src/infrastructure/persistence/migrations"], // * This line, along 'synchronize: false', it's the basic setup for migrations
+  synchronize: true, // * this property must be false when using migrations to not synchronize schemas automatically
+  logging: true,
+  entities: [
+    typeOrmEntities.TypeORMAuthor,
+    typeOrmEntities.TypeORMBook,
+    typeOrmEntities.TypeORMCustomer,
+    typeOrmEntities.TypeORMLoan,
+  ],
+  subscribers: [],
+  migrations: ["src/infrastructure/persistence/migrations"], // * This line, along 'synchronize: false', it's the basic setup for migrations
 
-    // optional
-   /*  migrationsRun: false, // * specifies whether migrations should run automatically when the application is launched. The default value is false
+  // optional
+  /*  migrationsRun: false, // * specifies whether migrations should run automatically when the application is launched. The default value is false
     migrationsTableName: "migrations", // * name of the table that stores information about executed migrations. The default value is 'false'
-    migrationsTransactionMode: "all",  */// * Controls the transaction mode when running migrations. The default value is "all", but other options are "none" and "each".
-})
+    migrationsTransactionMode: "all",  */ // * Controls the transaction mode when running migrations. The default value is "all", but other options are "none" and "each".
+});
 
 // to initialize the initial connection with the database, register all entities
 // and "synchronize" database schema, call "initialize()" method of a newly created database
 // once in your application bootstrap
 
 export async function initializeDatabase() {
-    try {
-        await AppDataSource.initialize()
-        console.log("Data Source from TypeORM has been initialized!")
-    } catch (error) {
-        console.error("Error during Data Source initialization: ", error)
+  try {
+    if (!AppDataSource.isInitialized) {
+      await AppDataSource.initialize();
+      console.log("Data Source from TypeORM has been initialized!");
+    } else {
+      console.log(
+        "DataSource: Data Source from TypeORM is already initialized!",
+      );
     }
+  } catch (error) {
+    console.error("Error during Data Source initialization: ", error);
+  }
 }

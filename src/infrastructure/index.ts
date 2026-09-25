@@ -14,7 +14,6 @@ import "dotenv/config";
 import multer, { Multer } from "multer";
 
 
-
 // * Backend's main file. Every dependency and config is declared here: dependencies, database connection, etc. All that is important.
 
 export const app = express();
@@ -65,11 +64,11 @@ app.use("/loans", loanRoutes);
 app.post(["/upload", "/uploads"], upload.single("file"), uploadManager);
 
 // * upload from directory with Multer (dependency for 'multipart/form-data'). I added support for several files with same columns (same content structure), but it was only necessary to upload one from the request.
-// * Uncomment if necessary to upload several files with same columns (same content structure) from the request. It would be necessary to change the controller function to handle several files.
+// ! Uncomment this line if necessary to upload several files with same columns (same content structure) from the request. It would be necessary to change the controller function to handle several files.
 //app.post("/uploads", upload.array("file"), fromRequestUpload);
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript server is running");
+  res.send("Express 4.18.2 + TypeScript 5.5.6 server is running");
 });
 
 // * Initialization of the database connection using TypeORM. It can be accessed because it belongs to the Domain Layer (an inferior layer)
