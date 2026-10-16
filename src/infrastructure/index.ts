@@ -13,7 +13,7 @@ import cors from "cors";
 import "dotenv/config";
 import multer, { Multer } from "multer";
 import helmet from "helmet";
-
+import morgan from "morgan";
 
 // * Backend's main file. Every dependency and config is declared here: dependencies, database connection, etc. All that is important.
 
@@ -52,6 +52,9 @@ app.use(cors()); // needs npm i --save-dev @types/cors
 // implement Helmet to add several headers to the responses for security purposes
 app.use(helmet());
 
+// implement Morgan to log the requests in the console. It is very useful for debugging purposes.
+app.use(morgan('common'));
+
 // * load routers
 const customerRoutes = controllerRoutes.customerRouter;
 const authorRoutes = controllerRoutes.authorRouter;
@@ -72,7 +75,7 @@ app.post(["/upload", "/uploads"], upload.single("file"), uploadManager);
 //app.post("/uploads", upload.array("file"), fromRequestUpload);
 
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express 4.18.2 + TypeScript 5.5.6 server is running");
+  res.send("Express 4.18.2 + TypeScript 5.9.3 server is running");
 });
 
 // * Initialization of the database connection using TypeORM. It can be accessed because it belongs to the Domain Layer (an inferior layer)
