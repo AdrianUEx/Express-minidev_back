@@ -47,7 +47,7 @@ export class AuthorRepository implements AuthorRepositoryInterface {
     let newAuthor: TypeORMAuthor = new TypeORMAuthor();
     newAuthor.name = author.name;
     newAuthor.lastname = author.lastname;
-    newAuthor.birthDate = author.birthDate;
+    newAuthor.birthDate = new Date(author.birthDate);
     newAuthor.nationality = author.nationality;
     newAuthor.biography = author.biography;
 
@@ -59,7 +59,7 @@ export class AuthorRepository implements AuthorRepositoryInterface {
     let newAuthor: TypeORMAuthor = new TypeORMAuthor();
     newAuthor.name = author.name;
     newAuthor.lastname = author.lastname;
-    newAuthor.birthDate = author.birthDate;
+    newAuthor.birthDate = new Date(author.birthDate);
     newAuthor.nationality = author.nationality;
     newAuthor.biography = author.biography;
 

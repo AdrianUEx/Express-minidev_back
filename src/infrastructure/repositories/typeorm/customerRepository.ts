@@ -45,7 +45,7 @@ export class CustomerRepository implements CustomerRepositoryInterface {
     let newCustomer: TypeORMCustomer = new TypeORMCustomer();
     newCustomer.name = customer.name;
     newCustomer.lastname = customer.lastname;
-    newCustomer.registrationDate = customer.registrationDate;
+    newCustomer.registrationDate = new Date(customer.registrationDate);
     newCustomer.phone = customer.phone;
 
     const insertResult = await ormCustomerRepository.insert(newCustomer); // .save() can also be used instead of .insert(), but .insert() is more specialized
@@ -56,7 +56,7 @@ export class CustomerRepository implements CustomerRepositoryInterface {
     let newCustomer: TypeORMCustomer = new TypeORMCustomer();
     newCustomer.name = customer.name;
     newCustomer.lastname = customer.lastname;
-    newCustomer.registrationDate = customer.registrationDate;
+    newCustomer.registrationDate = new Date(customer.registrationDate);
     newCustomer.phone = customer.phone;
 
     const updateResult = await ormCustomerRepository.update(requestId, newCustomer);

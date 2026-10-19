@@ -55,7 +55,7 @@ export class BookRepository implements BookRepositoryInterface {
     newBook.title = book.title;
     newBook.genre = book.genre;
     newBook.description = book.description;
-    newBook.publishDate = book.publishDate;
+    newBook.publishDate = new Date(book.publishDate);
     newBook.stock = book.stock;
     newBook.author = book.author;
 
@@ -70,7 +70,7 @@ export class BookRepository implements BookRepositoryInterface {
         newBook.title = book.title;
         newBook.genre = book.genre;
         newBook.description = book.description;
-        newBook.publishDate = book.publishDate;
+        newBook.publishDate = new Date(book.publishDate);
         newBook.stock = book.stock;
         newBook.author = book.author;
     

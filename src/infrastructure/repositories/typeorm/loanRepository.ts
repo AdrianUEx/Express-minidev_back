@@ -60,9 +60,9 @@ export class LoanRepository implements LoanRepositoryInterface {
     newLoan.id = loan.id;
     newLoan.book = loan.book;
     newLoan.client = loan.client;
-    newLoan.loanDate = loan.loanDate;
-    newLoan.predictedReturnDate = loan.predictedReturnDate;
-    newLoan.realReturnDate = loan.realReturnDate;
+    newLoan.loanDate = new Date(loan.loanDate);
+    newLoan.predictedReturnDate = new Date(loan.predictedReturnDate);
+    newLoan.realReturnDate = new Date(loan.realReturnDate);
     newLoan.state = loan.state;
 
 
@@ -75,9 +75,9 @@ export class LoanRepository implements LoanRepositoryInterface {
     newLoan.id = loan.id;
     newLoan.book = loan.book;
     newLoan.client = loan.client;
-    newLoan.loanDate = loan.loanDate;
-    newLoan.predictedReturnDate = loan.predictedReturnDate;
-    newLoan.realReturnDate = loan.realReturnDate;
+    newLoan.loanDate = new Date(loan.loanDate);
+    newLoan.predictedReturnDate = new Date(loan.predictedReturnDate);
+    newLoan.realReturnDate = new Date(loan.realReturnDate);
     newLoan.state = loan.state;
 
     const updateResult = await ormLoanRepository.update(requestId, newLoan);
